@@ -1,8 +1,9 @@
-# 공통 유틸리티 함수 및 헬퍼 모듈
+# loginlogout/login.py
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import pytest
 
-# 드라이버
+@pytest.fixture
 def driver():
     """크롬 브라우저를 열고 테스트 후 닫는 pytest fixture"""
     options = webdriver.ChromeOptions()
@@ -13,8 +14,7 @@ def driver():
     yield driver
     driver.quit()  # 테스트 완료 후 브라우저 닫기
 
-# 관리자 계정 로그인
-def login_admin_success(driver):
+def test_login_admin_success(driver):
     # 1. 로그인 페이지 접속
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
     # 2. 사용자명과 비밀번호 입력
@@ -31,3 +31,12 @@ def login_admin_success(driver):
 
     assert "team01" in welcome_id  # 환영 메시지가 포함되어 있는지 검증
     assert "qa3team01@elicer.com" in welcome_email  # 환영 메시지가 포함되어 있는지 검증
+
+
+# def test_login_fail_wrong_password(driver):
+#     driver.get("http://example.com/login")
+#     driver.find_element(By.NAME, "username").send_keys("testuser")
+#     driver.find_element(By.NAME, "password").send_keys("wrong_password")
+#     driver.find_element(By.ID, "login-btn").click()
+#     error_msg = driver.find_element(By.CSS_SELECTOR, ".error-msg").text
+#     assert "비밀번호가 올바르지 않습니다" in error_msg  # 오류 메시지 검증
