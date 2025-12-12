@@ -1,1 +1,6 @@
 !my-empty-folder/
+src/AccountGroup/loginlogout/__pycache__/login.cpython-311-pytest-9.0.2.pyc
+src/AccountGroup/loginlogout/__pycache__/test_.cpython-311-pytest-9.0.2.pyc
+src/AccountGroup/loginlogout/__pycache__/test_a.cpython-311-pytest-9.0.2.pyc
+src/AccountGroup/loginlogout/__pycache__/test.cpython-311-pytest-9.0.2.pyc
+tests/__pycache__/conftest.cpython-311-pytest-9.0.2.pyc
