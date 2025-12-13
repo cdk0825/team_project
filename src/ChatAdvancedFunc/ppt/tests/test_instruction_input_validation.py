@@ -32,8 +32,8 @@ LONG_INSTRUCTION = (
 
 
 @pytest.mark.parametrize("instruction, expect_error", [
-    # ("", False),                  # 공백 (필수 아님)
-    # ("간단한 지시사항", False),    # 정상 입력
+    ("", False),                  # 공백 (필수 아님)
+    ("간단한 지시사항", False),    # 정상 입력
     (LONG_INSTRUCTION, True),     # 2000자 초과
 ])
 def test_instruction_input_validation(driver, instruction, expect_error):
