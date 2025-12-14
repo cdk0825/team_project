@@ -13,6 +13,8 @@ class PPTCreatePage:
     # locators
     TOOL_TAB = (By.XPATH, "//span[text()='도구']")
     PPT_TAB = (By.XPATH, "//p[text()='PPT 생성']")
+    NEWCHAT_TAB = (By.XPATH, "//span[text()='새 대화']")
+    
     TOPIC_INPUT = (By.XPATH, "//label[contains(.,'주제')]/following::input[1]")
     INSTRUCTION_AREA = (By.XPATH, "//label[contains(.,'지시사항')]/following::textarea[1]")
     CREATE_BTN = (By.XPATH, "//button[@form='tool-factory-create_pptx']")
@@ -38,6 +40,9 @@ class PPTCreatePage:
 
     def click_ppt_tab(self):
         self.wait.until(EC.element_to_be_clickable(self.PPT_TAB)).click()
+    
+    def click_newchat_tab(self):
+        self.wait.until(EC.element_to_be_clickable(self.NEWCHAT_TAB)).click()
 
     def clear_inputs(self):
         self.clear_topic_input()
@@ -128,6 +133,12 @@ class PPTCreatePage:
 
     def enter_slide_input(self, value):
         self.wait.until(EC.presence_of_element_located(self.SLIDE_INPUT)).send_keys(value)
+    
+    def get_topic_value(self):
+        return self.driver.find_element(*self.TOPIC_INPUT).get_attribute("value")
+
+    def get_instruction_value(self):
+        return self.driver.find_element(*self.INSTRUCTION_AREA).get_attribute("value")
 
     def get_section_value(self):
         return self.driver.find_element(*self.SECTION_INPUT).get_attribute("value")
