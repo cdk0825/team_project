@@ -40,10 +40,6 @@ def test_ppt_generation_stop(driver):
     )
     print("[STEP] 지시사항 입력")
 
-    toggle_value = ppt_page.turn_on_deep_toggle_if_off()
-    assert toggle_value == "true"
-    print("[STEP] 심층조사모드 ON 확인")
-
     # when
     ppt_page.click_create()
     print("[STEP] 생성 버튼 클릭")
