@@ -24,28 +24,33 @@ def test_success_create(driver):
     # when
     ppt_page.click_tool_tab()
     assert "/tools" in driver.current_url
+    
     print("[STEP] PPT 생성 탭 클릭")
-
     ppt_page.click_ppt_tab()
+    
     print("[STEP] 입력값 초기화")
-
     ppt_page.clear_inputs()
+    
     print("[STEP] 주제 입력: 이순신 장군")
-
     ppt_page.enter_topic("이순신 장군")
-    print("[완료] 주제 입력")
+    
+    print("[STEP] 지시사항 입력")
+    ppt_page.enter_instruction("이순신에 대해서 텍스트, 이미지, 표를 활용하여 생성")
+    
+    print("[STEP] 섹션 입력: 2")
+    ppt_page.enter_section_input(2)
+    
+    print("[STEP] 슬라이드 입력: 4")
+    ppt_page.enter_slide_input(4)
+    
+    print("[STEP] 심층조사 모드 ON")
+    ppt_page.turn_on_deep_toggle()
+    
+    print("[STEP] 입력값 입력 완료")
 
     print("[ASSERT] 생성 버튼 활성화 확인")
     assert ppt_page.is_create_button_enabled() is True
     print("[ASSERT PASS] 생성 버튼 활성화 상태")
-
-    ppt_page.enter_instruction("이순신에 대해서 텍스트, 이미지, 표를 활용하여 생성")
-    print("[STEP] 지시사항 입력")
-
-    print("[STEP] 심층조사 토글 상태 확인")
-    final_toggle_value = ppt_page.turn_on_deep_toggle_if_off()
-    assert final_toggle_value == "true"
-    print("[ASSERT PASS] 심층조사 토글 ON 확인")
 
     ppt_page.click_create()
     print("[STEP] 생성 버튼 클릭")

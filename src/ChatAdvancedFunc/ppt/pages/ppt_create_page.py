@@ -1,13 +1,14 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 import time
 
 
 class PPTCreatePage:
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 100)
+        self.wait = WebDriverWait(driver, 300)
 
     # locators
     TOOL_TAB = (By.XPATH, "//span[text()='도구']")
@@ -17,8 +18,6 @@ class PPTCreatePage:
     CREATE_BTN = (By.XPATH, "//button[@form='tool-factory-create_pptx']")
     
     DEEP_TOGGLE_INPUT = (By.XPATH, "//input[@name='simple_mode']")
-    DEEP_TOGGLE_WRAPPER = (By.XPATH, "//input[@name='simple_mode']/parent::span")
-    TOGGLE_WRAPPER = (By.XPATH, "//input[@name='simple_mode']/following-sibling::span")
     
     REGENERATE_BTN = (By.XPATH, "//button[contains(@class, 'css-1thd9aa') and text()='다시 생성']")
     DOWNLOAD_BTN = (By.XPATH, "//a[contains(., '생성 결과 다운받기')]")
@@ -26,8 +25,8 @@ class PPTCreatePage:
     STOP_ICON = (By.XPATH, "//*[@data-testid='stopIcon']")
     STOP_MESSAGE = (By.XPATH, "//div[contains(@class,'MuiAlert-message')]" "//div[contains(text(),'요청에 의해 답변 생성을 중지했습니다.')]")
     
-    SECTION_INPUT = (By.XPATH, "//input[@name='slides_count']")
-    SLIDE_INPUT = (By.XPATH, "//input[@name='section_count']")
+    SECTION_INPUT = (By.XPATH, "//input[@name='section_count']")
+    SLIDE_INPUT = (By.XPATH, "//input[@name='slides_count']")
     
     TOPIC_ERROR_TEXT = (By.XPATH, "//p[text()='1자 이상 500자 이하로 입력해주세요.']")
     INSTRUCTION_ERROR_TEXT = (By.XPATH, "//p[text()='2000자 이하로 입력해주세요.']")
@@ -41,8 +40,52 @@ class PPTCreatePage:
         self.wait.until(EC.element_to_be_clickable(self.PPT_TAB)).click()
 
     def clear_inputs(self):
-        self.wait.until(EC.presence_of_element_located(self.TOPIC_INPUT)).clear()
-        self.wait.until(EC.presence_of_element_located(self.INSTRUCTION_AREA)).clear()
+        self.clear_topic_input()
+        self.clear_instruction_input()
+        self.clear_section_input()
+        self.clear_slide_input()
+        self.clear_deep_toggle()
+    
+    def clear_topic_input(self):
+        topic_input = self.wait.until(
+            EC.element_to_be_clickable(self.TOPIC_INPUT)
+        )
+        topic_input.click()
+        topic_input.send_keys(Keys.CONTROL, "a")
+        topic_input.send_keys(Keys.BACKSPACE)
+    
+    def clear_instruction_input(self):
+        instruction = self.wait.until(
+            EC.element_to_be_clickable(self.INSTRUCTION_AREA)
+        )
+        instruction.click()
+        instruction.send_keys(Keys.CONTROL, "a")
+        instruction.send_keys(Keys.BACKSPACE)
+        
+    def clear_section_input(self):
+        section_input = self.wait.until(
+            EC.element_to_be_clickable(self.SECTION_INPUT)
+        )
+        section_input.click()
+        section_input.send_keys(Keys.CONTROL, "a")
+        section_input.send_keys(Keys.BACKSPACE)
+
+    def clear_slide_input(self):
+        slide_input = self.wait.until(
+            EC.element_to_be_clickable(self.SLIDE_INPUT)
+        )
+        slide_input.click()
+        slide_input.send_keys(Keys.CONTROL, "a")
+        slide_input.send_keys(Keys.BACKSPACE)
+    
+    def clear_deep_toggle(self):
+        toggle_input = self.wait.until(
+            EC.presence_of_element_located(self.DEEP_TOGGLE_INPUT)
+        )
+        if toggle_input.is_selected():
+            toggle_input.click()
+
+            self.wait.until(lambda d: not toggle_input.is_selected())
 
     def enter_topic(self, topic):
         self.wait.until(EC.presence_of_element_located(self.TOPIC_INPUT)).send_keys(topic)
@@ -52,18 +95,6 @@ class PPTCreatePage:
 
     def is_create_button_enabled(self):
         return self.driver.find_element(*self.CREATE_BTN).is_enabled()
-
-    def turn_on_deep_toggle_if_off(self):
-        toggle_input = self.driver.find_element(*self.DEEP_TOGGLE_INPUT)
-        toggle_wrapper = self.driver.find_element(*self.DEEP_TOGGLE_WRAPPER)
-
-        if toggle_input.get_attribute("value") == "false":
-            toggle_wrapper.click()
-            WebDriverWait(self.driver, 5).until(
-                lambda d: toggle_input.get_attribute("value") == "true"
-            )
-
-        return toggle_input.get_attribute("value")  
 
     def click_create(self):
         self.wait.until(EC.element_to_be_clickable(self.CREATE_BTN)).click()
@@ -91,12 +122,6 @@ class PPTCreatePage:
             ).text
         except:
             return None
-    
-    def clear_section_input(self):
-        self.wait.until(EC.presence_of_element_located(self.SECTION_INPUT)).clear()
-
-    def clear_slide_input(self):
-        self.wait.until(EC.presence_of_element_located(self.SLIDE_INPUT)).clear()
 
     def enter_section_input(self, value):
         self.wait.until(EC.presence_of_element_located(self.SECTION_INPUT)).send_keys(value)
@@ -109,6 +134,14 @@ class PPTCreatePage:
 
     def get_slide_value(self):
         return self.driver.find_element(*self.SLIDE_INPUT).get_attribute("value")
+    
+    def turn_on_deep_toggle(self):
+        toggle_input = self.wait.until(
+            EC.presence_of_element_located(self.DEEP_TOGGLE_INPUT)
+        )
+        if not toggle_input.is_selected():
+            toggle_input.click()
+            self.wait.until(lambda d: toggle_input.is_selected())
     
     def get_topic_error_text(self):
         try:

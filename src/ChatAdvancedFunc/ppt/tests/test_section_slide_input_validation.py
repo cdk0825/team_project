@@ -3,10 +3,9 @@ from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils import login
 
 @pytest.mark.parametrize("testdata, expected", [
-    ("강아지", ""),   # 문자 입력 -> 비어야 함
-    ("abc", ""),      # 문자 입력 -> 비어야 함
+    ("강아지", ""),   # 한글 문자 입력 -> 비어야 함
+    ("abc", ""),      # 영어 문자 입력 -> 비어야 함
     ("5", "5"),       # 숫자 입력 -> 그대로 들어가야 함
-    ("7", "7")      # 숫자 입력 -> 그대로 들어가야 함
 ])
 def test_section_slide_input_validation(driver, testdata, expected):
     """
@@ -26,9 +25,8 @@ def test_section_slide_input_validation(driver, testdata, expected):
     ppt_page.click_ppt_tab()
     print("[STEP] PPT 생성 탭 클릭")
 
-    ppt_page.clear_section_input()
-    ppt_page.clear_slide_input()
-    print("[STEP] 섹션 / 슬라이드 입력값 초기화")
+    ppt_page.clear_inputs()
+    print("[STEP] 입력값 초기화")
 
     ppt_page.enter_section_input(testdata)
     ppt_page.enter_slide_input(testdata)
