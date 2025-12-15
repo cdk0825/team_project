@@ -2,18 +2,19 @@ import pytest
 from src.utils import login
 from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
-@pytest.mark.parametrize("skip_option, skip_difficulty", [
-    (True, False),   # 유형 미선택
-    (False, True),   # 난이도 미선택
+@pytest.mark.parametrize("skip_option, skip_difficulty, skip_topic", [
+    (True, False, False),    # 유형 미선택
+    (False, True, False),    # 난이도 미선택
+    (False, False, True),    # 주제 미입력
 ])
-def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty):
+def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty, skip_topic):
     """
     QUIZ 생성 필수 입력값 유효성 검증
-    - 유형과 난이도는 각각 필수 입력값임
-    - 선택하지 않은 경우 생성 버튼이 비활성화 상태임
+    - 유형, 난이도, 주제 각각 필수 입력
+    - 선택/입력하지 않은 경우 생성 버튼이 비활성화 상태임
     """
     print("\n==============================")
-    print("[TEST START] Quiz Option/Difficulty Input Validation")
+    print("[TEST START] Quiz Input Validation")
     
     # 로그인(초기화 기능 이슈로 이전 퀴즈 생성 기록이 없는 계정이어야함)
     login(driver, "qa3team0104@elicer.com", "team01cheerup!")
@@ -29,9 +30,11 @@ def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty
     quiz_page.clear_inputs()
     print("[STEP] 입력값 초기화 완료")
     
-    # 주제 입력 (테스트용 기본 값)
-    quiz_page.enter_topic("테스트 퀴즈 주제")
-    print("[STEP] 주제 입력 완료")
+    if not skip_topic:
+        quiz_page.enter_topic("테스트 퀴즈 주제")
+        print("[STEP] 주제 입력 완료")
+    else:
+        print("[STEP] 주제 입력 생략")
 
     if not skip_option:
         quiz_page.select_option_type()
@@ -49,7 +52,6 @@ def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty
 
     is_enabled = quiz_page.is_create_button_enabled()
     print(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
-
     assert is_enabled is False, "생성 버튼이 활성화 되어 있음! 필수 입력값 검증 실패"
 
     print("[ASSERT PASS] 유형/난이도 필수 입력값 유효성 검증 성공")

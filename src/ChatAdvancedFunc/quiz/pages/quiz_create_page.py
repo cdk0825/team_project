@@ -26,6 +26,7 @@ class QUIZCreatePage:
     DIFFICULTY_LOW = (By.XPATH, "//li[@data-value='Level1']")  # 하
 
     TOPIC_TEXTAREA = (By.XPATH, "//textarea[@name='content' and @placeholder='퀴즈 주제를 입력해주세요.']")
+    TOPIC_ERROR_TEXT = (By.XPATH, "//p[contains(text(),'1자 이상 입력해주세요.')]")
 
     CREATE_BTN = (By.XPATH, "//button[@form='tool-factory-create_quiz_from_context']")
     REGENERATE_BTN = (By.XPATH, "//button[contains(@class,'css-1thd9aa') and normalize-space(.)='다시 생성']")
@@ -102,6 +103,12 @@ class QUIZCreatePage:
     
     def enter_topic(self, topic):
         self.wait.until(EC.presence_of_element_located(self.TOPIC_TEXTAREA)).send_keys(topic)
+    
+    def get_topic_error_text(self):
+        try:
+            return self.wait.until(EC.visibility_of_element_located(self.TOPIC_ERROR_TEXT)).text
+        except:
+            return None
 
     def is_create_button_enabled(self):
         return self.driver.find_element(*self.CREATE_BTN).is_enabled()
