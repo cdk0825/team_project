@@ -9,3 +9,7 @@ NEW_TITLE_NAME = "새로운이름"
 
 DELETE_MODAL_TITLE = '삭제 확인'
 DELETE_CONFIRM_BTN_PARAGRAPH = '삭제'
+
+SCROLL_PAUSE_TIME = 1.5
+
+INDEX_ATTRIBUTE = "data-item-index"

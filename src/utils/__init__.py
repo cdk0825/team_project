@@ -18,9 +18,9 @@ def login(driver, username, password):
         EC.element_to_be_clickable((By.XPATH, "//button[normalize-space(text())='Login']"))
     ).click()
 
-def capture_screenshot(driver, save_path="reports/screenshots"):
+def capture_screenshot(driver, save_path="reports/screenshots", title="screenshot"):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"screenshot_{timestamp}.png"
+    file_name = f"{title}_{timestamp}.png"
 
     if not os.path.exists(save_path):
         os.makedirs(save_path)

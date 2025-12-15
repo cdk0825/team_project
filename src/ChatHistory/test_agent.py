@@ -17,7 +17,7 @@ def test_agent_lists(logged_in_driver):
     print(is_agent_list_present)
     assert is_agent_list_present, f"❌ 에이전트 목록을 찾지 못했습니다."
     print("✅ 액션: 에이전트 목록 확인됨")
-    print("\n🔚 [F1HEL-T4] TC 종료")
+    print("🔚 [F1HEL-T4] TC 종료")
 
 def test_search_agent_success(logged_in_driver):
     print("\n🆕 [F1HEL-T5] TC 실행")
@@ -41,4 +41,4 @@ def test_search_agent_success(logged_in_driver):
     assert set(before_result) == set(after_result) and len(before_result) == len(after_result), "❌ 기대 결과와 실제 결과가 일치하지 않습니다."
     print("✅ 검증 성공: 기대 결과와 실제 결과가 일치합니다.")
 
-    print("\n🔚 [F1HEL-T4] TC 종료")
+    print("🔚 [F1HEL-T4] TC 종료")
