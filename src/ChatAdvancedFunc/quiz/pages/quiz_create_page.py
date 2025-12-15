@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 import time
 
 
@@ -38,6 +39,8 @@ class QUIZCreatePage:
     QUESTION_ICON = (By.XPATH, "//*[contains(@data-testid,'square-question')]")
     LEARNING_GOAL_TITLE = (By.XPATH, "//p[contains(text(),'학습 목표')]")
     OPTION_A = (By.XPATH, "//div[contains(@class,'MuiPaper-root') and normalize-space(.)='A']")
+    OPTION_B = (By.XPATH, "//div[contains(@class,'MuiPaper-root') and normalize-space(.)='B']")
+    CHECK_ICON = (By.XPATH, "//*[@data-testid='circle-checkIcon' and @data-prefix='fas']")
     EXPLANATION_TITLE = (By.XPATH, "//p[contains(normalize-space(.),'해설')]")
     
     # actions
@@ -142,6 +145,17 @@ class QUIZCreatePage:
 
     def is_option_displayed(self):
         return self.wait.until(EC.visibility_of_element_located(self.OPTION_A)).is_displayed()
+    
+    def is_option_b_displayed(self):
+        try:
+            return WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(self.OPTION_B)
+            ).is_displayed()
+        except TimeoutException:
+            return False
+
+    def get_check_icon_count(self):
+        return len(self.driver.find_elements(*self.CHECK_ICON))
 
     def is_explanation_displayed(self):
         return self.wait.until(EC.visibility_of_element_located(self.EXPLANATION_TITLE)).is_displayed()
