@@ -52,7 +52,10 @@ class QUIZCreatePage:
         
     def click_quiz_tab(self):
         self.wait.until(EC.element_to_be_clickable(self.QUIZ_TAB)).click()
-        
+    
+    def click_newchat_tab(self):
+        self.wait.until(EC.element_to_be_clickable(self.NEWCHAT_TAB)).click()
+    
     def clear_inputs(self):
         self.clear_topic()
 
@@ -159,3 +162,12 @@ class QUIZCreatePage:
 
     def is_explanation_displayed(self):
         return self.wait.until(EC.visibility_of_element_located(self.EXPLANATION_TITLE)).is_displayed()
+    
+    def get_topic_value(self):
+        return self.driver.find_element(*self.TOPIC_TEXTAREA).get_attribute("value")
+
+    def get_option_value(self):
+        return self.driver.find_element(*self.OPTION_TYPE_SELECT).get_attribute("textContent").strip()
+
+    def get_difficulty_value(self):
+        return self.driver.find_element(*self.DIFFICULTY_SELECT).get_attribute("textContent").strip()
