@@ -122,6 +122,15 @@ class QUIZCreatePage:
     def wait_generation_complete(self):
         self.wait.until(EC.invisibility_of_element_located(self.STOP_ICON))
     
+    def click_stop_icon(self):
+        self.wait.until(EC.element_to_be_clickable(self.STOP_ICON)).click()
+
+    def get_stop_message_text(self):
+        try:
+            return self.wait.until(EC.visibility_of_element_located(self.STOP_MESSAGE)).text
+        except:
+            return None
+    
     def wait_success_message(self):
         return self.wait.until(EC.visibility_of_element_located(self.SUCCESS_MESSAGE))
 
