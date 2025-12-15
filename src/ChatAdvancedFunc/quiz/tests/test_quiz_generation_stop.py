@@ -3,7 +3,7 @@ from src.utils import login
 from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 
-def test_ppt_generation_stop(driver):
+def test_quiz_generation_stop(driver):
     """
     QUIZ 생성 중지 기능 테스트
     - 유형/난이도 선택
