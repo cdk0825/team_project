@@ -1,0 +1,44 @@
+[
+  {
+    "loginId": "qa3team0101@elicer.com",
+    "password": "team01cheerup!",
+    "name":"team0101",
+    "expected_result" : "success"
+  },
+    {
+    "loginId": "qa3team0102@elicer.com",
+    "password": "F1Race1208!",
+    "expected_result" : "failure_notmatch",
+    "expected_msg" : "Email or password does not match"
+  },
+    {
+    "loginId": "testtest123@elicer.com",
+    "password": "F1Race1208!",
+    "expected_result" : "failure_notmatch",
+    "expected_msg" : "Email or password does not match"
+  },
+    {
+    "loginId": "",
+    "password": "F1Race1208!",
+    "expected_result" : "failure_empty_em",
+    "expected_msg" : "Please enter your email address."
+  },
+    {
+    "loginId": "qa3team0102@elicer.com",
+    "password": "",
+    "expected_result" : "failure_empty_pw",
+    "expected_msg" : "Please enter your password."
+  },
+    {
+    "loginId": "qa3team0102",
+    "password": "team01cheerup!",
+    "expected_result" : "failure_em",
+    "expected_msg" : "Invalid email format."
+  },
+    {
+    "loginId": "#$%$$@naver.com",
+    "password": "team01cheerup!",
+    "expected_result" : "failure_em",
+    "expected_msg" : "Invalid email format."
+  }
+]
