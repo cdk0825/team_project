@@ -6,11 +6,10 @@ from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 def test_ppt_generation_stop(driver):
     """
     PPT 생성 중지 기능 테스트
-    1. 주제 / 지시사항 입력
-    2. 심층조사모드 ON
-    3. 생성 → 다시 생성
-    4. STOP 아이콘 클릭
-    5. 중지 안내 멘트 노출 확인
+    - 주제 / 지시사항 입력
+    - 생성 → 다시 생성
+    - STOP 아이콘 클릭
+    - 중지 안내 멘트 노출 확인
     """
 
     print("\n==============================")
