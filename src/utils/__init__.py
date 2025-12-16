@@ -18,7 +18,6 @@ def login(driver, USERNAME, PASSWORD):
         EC.element_to_be_clickable((By.XPATH, "//button[normalize-space(text())='Login']"))
     ).click()
 
-
 def go_to_join(driver):
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
     driver.delete_all_cookies()

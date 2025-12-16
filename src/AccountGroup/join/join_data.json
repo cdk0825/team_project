@@ -1,55 +1,55 @@
 [
   {
-    "loginId": "tester.zu.digimon+s2@gmail.com",
+    "loginId": "tester.zu.digimon+s100@gmail.com",
     "password": "F1Race1208!",
     "name": "박지우",
     "expected_result" : "success",
     "expected_msg" : ""
   },
     {
-    "loginId": "tester.zu.digimon+f10",
+    "loginId": "tester.zu.digimon+f100",
     "password": "F1Race1208!",
     "name": "실패1",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f11@",
+    "loginId": "tester.zu.digimon+f110@",
     "password": "F1Race1208!",
     "name": "실패2",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f12@never.com",
+    "loginId": "tester.zu.digimon+f200@never.com",
     "password": "F1Race1208!",
     "name": "실패3",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
       {
-    "loginId": "테스터+f13@naver.com",
+    "loginId": "테스터+f210@naver.com",
     "password": "F1Race1208!",
     "name": "실패4",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f14@지메일.com",
+    "loginId": "tester.zu.digimon+f220@지메일.com",
     "password": "F1Race1208!",
     "name": "실패5",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f15@@gmail.com",
+    "loginId": "tester.zu.digimon+f230@@gmail.com",
     "password": "F1Race1208!",
     "name": "실패6",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
     {
-    "loginId": "tester.zu.digimon+f16@@gmail",
+    "loginId": "tester.zu.digimon+f160@@gmail",
     "password": "F1Race1208!",
     "name": "실패7",
     "expected_result" : "failure_email",
@@ -63,63 +63,63 @@
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f17@gmail.com",
+    "loginId": "tester.zu.digimon+f170@gmail.com",
     "password": "75369845",
     "name": "실패9",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f18@gmail.com",
+    "loginId": "tester.zu.digimon+f180@gmail.com",
     "password": "qweasdzx",
     "name": "실패10",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
       {
-    "loginId": "tester.zu.digimon+f19@gmail.com",
+    "loginId": "tester.zu.digimon+f190@gmail.com",
     "password": "!@#$%^&*",
     "name": "실패11",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f20@gmail.com",
+    "loginId": "tester.zu.digimon+f200@gmail.com",
     "password": "qw12!@",
     "name": "실패12",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f21@gmail.com",
+    "loginId": "tester.zu.digimon+f210@gmail.com",
     "password": "75369845qw",
     "name": "실패13",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f22@gmail.com",
+    "loginId": "tester.zu.digimon+f220@gmail.com",
     "password": "75369845!@",
     "name": "실패14",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please make your password stronger! Try to combine at least 8 characters including English, numeric and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f23@gmail.com",
+    "loginId": "tester.zu.digimon+f230@gmail.com",
     "password": "",
     "name": "실패15",
     "expected_result" : "failure_pw",
     "expected_msg" :"Please use at least 8 characters with a combination of English letters, numbers and special characters."
   },
   {
-    "loginId": "tester.zu.digimon+f24@gmail.com",
+    "loginId": "tester.zu.digimon+f240@gmail.com",
     "password": "F1Race1208!",
     "name": "",
     "expected_result" : "failure_name_empty",
     "expected_msg" : "Please enter your name."
   },
   {
-    "loginId": "tester.zu.digimon+f25@gmail.com",
+    "loginId": "tester.zu.digimon+f260@gmail.com",
     "password": "F1Race1208!",
     "name": "가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890가나다라마바사아자차카타파하abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
     "expected_result" : "failure_name_over",

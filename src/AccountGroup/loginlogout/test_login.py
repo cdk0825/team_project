@@ -3,12 +3,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from src.utils import login
+from src.pages.joinlogin_page import JoinPage
 from src.config import USERNAME, PASSWORD 
 import os
 import json
 import pytest
 import logging
 import time
+
 
 #로깅설정하기
 logging.basicConfig(
@@ -24,28 +26,26 @@ with open(json_path, "r", encoding="utf-8") as f:
 
 @pytest.mark.parametrize("data", login_data_list)
 def test_login_cases(driver, data):
+    page = JoinPage(driver)
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
     driver.delete_all_cookies()
 
     try:
-        loginId = driver.find_element(By.NAME, "loginId")
-        loginPw = driver.find_element(By.NAME, "password")
-        loginId.send_keys(data["loginId"])
-        loginPw.send_keys(data["password"])
+        loginId = page.get_login_id()
+        loginPw = page.get_password()
+        page.set_login_id(data["loginId"])
+        page.set_password(data["password"])
         logger.info("로그인 폼 입력 완료")
 
         em_msg = driver.execute_script("return arguments[0].validationMessage;", loginId)
         pw_msg = driver.execute_script("return arguments[0].validationMessage;", loginPw)
 
-        driver.find_element(By.XPATH, "//button[normalize-space(text())='Login']").click()
+        page.login_btn_click()
 
         if data["expected_result"] == 'success':
-            WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, '.MuiAvatar-root'))
-            ).click()
-            #driver.find_element(By.CSS_SELECTOR, '.MuiAvatar-root').click()
-            welcome_id = driver.find_element(By.CSS_SELECTOR, "p.css-if9dpr").text
-            welcome_email = driver.find_element(By.CSS_SELECTOR, "p.css-14lgytj").text
+            page.profile_click()
+            welcome_id = page.get_welcome_name()
+            welcome_email = page.get_welcome_email()
 
             assert data["name"] in welcome_id  # 환영 메시지가 포함되어 있는지 검증
             assert data["loginId"] in welcome_email  # 환영 메시지가 포함되어 있는지 검증
