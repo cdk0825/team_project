@@ -51,6 +51,7 @@ def test_login_cases(driver, data):
             assert data["loginId"] in welcome_email  # 환영 메시지가 포함되어 있는지 검증
         else:
             if data["expected_result"] == 'failure_notmatch':
+
                 time.sleep(3)
                 assert data["expected_msg"] in driver.page_source
             elif data["expected_result"] == 'failure_empty_em':

@@ -1,0 +1,21 @@
+
+  { 
+    "name_tests": [
+    {"name":"테스트힘","category" : "success"},
+    {"name":"","category" : "none"},
+    {"name":"세상은 끊임없이 변하고, 그 속에서 우리는 매일 새로운 선택을 하며 살아갑니다. 아침에 눈을 뜨는 순간부터 밤에 잠들기 전까지 수많은 작은 결정들이 쌓여 하루를 만듭니다. 커피를 마실지 차를 마실지, 버스를 탈지 지하철을 탈지, 혹은 책을 읽을지 영화를 볼지 같은 사소한 선택들이 모여 결국 우리의 삶을 형성합니다. 때로는 그 선택들이 예상치 못한 결과를 가져오기도 하고, 때로는 아무렇지 않게 지나가기도 합니다. 중요한 건 그 과정 속에서 자신을 조금씩 알아가고, 원하는 방향으로 나아가려는 의지를 잃지 않는 것입니다. 완벽하지 않아도 괜찮습니다. 흔들리면서도 앞으로 나아가는 것이 삶의 본질이니까요.","category" : "over" }
+    ],
+    "email_tests": [
+    {"email":"qa3team0104@elicer.com","category" : "already",
+    "expected_msg" : "이미 사용중인 이메일 입니다."},
+    {"email":"tester.zu.digimon@gmail.com","category" : "wrong_code",
+    "expected_msg" : "인증 코드가 올바르지 않습니다. 발급 받은 코드를 다시 확인해주세요."},
+    {"email":"tester.zu.digimon+f110@","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"tester.zu.digimon+f200@never.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"테스터+f210@naver.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"tester.zu.digimon+f220@지메일.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"tester.zu.digimon+f230@@gmail.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"tester.zu.digimon+f160@@gmail","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
+    {"email":"!#$%^^&!+f8@$#!#$.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."}
+    ]
+  }
