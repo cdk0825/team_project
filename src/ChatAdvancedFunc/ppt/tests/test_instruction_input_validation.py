@@ -46,7 +46,6 @@ def test_instruction_input_validation(driver, instruction, expect_error):
     print("\n==============================")
     print("[TEST START] Instruction Input Validation")
 
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
@@ -61,11 +60,9 @@ def test_instruction_input_validation(driver, instruction, expect_error):
     ppt_page.clear_inputs()
     print("[STEP] 입력값 초기화")
 
-    # when
     ppt_page.enter_instruction(instruction)
     print("[STEP] 지시사항 입력 완료")
 
-    # then
     error_text = ppt_page.get_instruction_error_text()
     print(f"[RESULT] error_text: {error_text}")
 

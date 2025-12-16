@@ -1,15 +1,18 @@
+# 히스토리 메뉴
 TITLE_RENAME_BUTTON_PARAGRAPH = '이름 변경'
 HISTORY_DELETE_BUTTON_PARAGRAPN = '삭제'
 
+# 이름 변경 모달 텍스트
 RENAME_MODAL_TITLE = '이름 변경'
 RENAME_CANCEL_BTN_PARAGRAPH = '취소'
 RENAME_SAVE_BTN_PARAGRAPH = '저장'
 
-NEW_TITLE_NAME = "새로운이름"
-
+# 삭제 모달 텍스트
 DELETE_MODAL_TITLE = '삭제 확인'
 DELETE_CONFIRM_BTN_PARAGRAPH = '삭제'
 
+# 스크롤 대기 시간
 SCROLL_PAUSE_TIME = 1.5
 
+# 히스토리 인덱스 속성
 INDEX_ATTRIBUTE = "data-item-index"

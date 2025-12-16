@@ -14,7 +14,6 @@ def test_success_create(driver):
     print("\n==============================")
     print("[TEST START] QUIZ Success Create")
     
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
