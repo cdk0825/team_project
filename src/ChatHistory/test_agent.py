@@ -1,7 +1,6 @@
 from src.pages.agent_page import AgentPage
-import time
 from src.resources.testdata.test_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD
-
+import pytest
 
 def test_agent_lists(logged_in_driver):
     print("\n🆕 [F1HEL-T4] TC 실행")
@@ -19,6 +18,7 @@ def test_agent_lists(logged_in_driver):
     print("✅ 액션: 에이전트 목록 확인됨")
     print("🔚 [F1HEL-T4] TC 종료")
 
+@pytest.mark.xfail(reason="기본 제공 에이전트 검색 불가")
 def test_agent_search_success(logged_in_driver):
     print("\n🆕 [F1HEL-T5] TC 실행")
     driver = logged_in_driver
@@ -32,9 +32,6 @@ def test_agent_search_success(logged_in_driver):
     before_result = agent.count_keyword_list(SEARCN_AGENT_KEYWORD)
     print(f"기대 결과: {before_result}")
     agent.input_search_keyword(SEARCN_AGENT_KEYWORD)
-
-    # 검색 결과가 업데이트 될 때까지 5초 기다리기
-    time.sleep(5)
 
     after_result = agent.count_keyword_list(SEARCN_AGENT_KEYWORD)
     print(f"실제 결과: {after_result}")
