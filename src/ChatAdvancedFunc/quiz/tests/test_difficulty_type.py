@@ -18,7 +18,6 @@ def test_quiz_difficulty(driver, difficulty):
     print("\n==============================")
     print(f"[TEST START] Quiz Difficulty Test - {difficulty.upper()}")
 
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 

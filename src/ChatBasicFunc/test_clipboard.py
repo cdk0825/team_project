@@ -13,8 +13,17 @@ WAIT_TIMEOUT = 200
 USER_EMAIL = "qa3team01@elicer.com"
 PASSWORD = "20qareset25elice!"
 
-def test_chat_edit(driver):
+TEXT = "hi"
+
+
+def test_chat_clipboard(driver):
+    
     chat_basic_page = chatBasicPage(driver)
 
     print("\n [SETUP] ⚙️ 액션: 관리자 로그인 시작")
     login(driver, USER_EMAIL, PASSWORD)
+    
+    print("\n [SETUP] ⚙️ 액션: 1. 클립보드 복사 시작")
+    chat_basic_page.send_message(TEXT)
+    chat_basic_page.clipboard_capy_for_text()
+    print("✅ 검증 성공: 1. 클립보드 복사 완료")

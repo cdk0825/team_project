@@ -94,4 +94,4 @@ def test_chat_edit(driver):
     chat_basic_page.send_message(TEXT8)
     print("✅ 검증 성공: 1. 일반 텍스트 질문 답변 완료")
     
-    chat_basic_page.edit_btn_click()
+    chat_basic_page.edit_btn_click(TEXT2)

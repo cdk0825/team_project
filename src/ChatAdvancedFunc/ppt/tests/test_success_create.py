@@ -15,13 +15,11 @@ def test_success_create(driver):
     print("\n==============================")
     print("[TEST START] PPT Success Create")
     
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
     ppt_page = PPTCreatePage(driver)
 
-    # when
     ppt_page.click_tool_tab()
     assert "/tools" in driver.current_url
     
@@ -58,7 +56,6 @@ def test_success_create(driver):
     ppt_page.click_regenerate()
     print("[STEP] 다시 생성 버튼 클릭")
 
-    # then    
     print("[WAIT] PPT 생성 완료 대기 (STOP 아이콘 사라질 때까지)")
     ppt_page.wait_generation_complete()
 

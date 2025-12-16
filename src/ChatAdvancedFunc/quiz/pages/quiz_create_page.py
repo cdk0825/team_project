@@ -171,3 +171,12 @@ class QUIZCreatePage:
 
     def get_difficulty_value(self):
         return self.driver.find_element(*self.DIFFICULTY_SELECT).get_attribute("textContent").strip()
+    
+    def trigger_topic_validation(self):
+        topic = self.wait.until(EC.element_to_be_clickable(self.TOPIC_TEXTAREA))
+        topic.click()
+        topic.send_keys("a")                 # 1글자 입력
+        topic.send_keys(Keys.CONTROL, "a")
+        topic.send_keys(Keys.BACKSPACE)      # 전부 삭제
+        topic.send_keys(Keys.TAB)             # blur 유도
+
