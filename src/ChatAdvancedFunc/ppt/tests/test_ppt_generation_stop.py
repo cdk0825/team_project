@@ -15,7 +15,6 @@ def test_ppt_generation_stop(driver):
     print("\n==============================")
     print("[TEST START] PPT Generation Stop")
 
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
@@ -39,7 +38,6 @@ def test_ppt_generation_stop(driver):
     )
     print("[STEP] 지시사항 입력")
 
-    # when
     ppt_page.click_create()
     print("[STEP] 생성 버튼 클릭")
 
@@ -49,7 +47,6 @@ def test_ppt_generation_stop(driver):
     ppt_page.click_stop_icon()
     print("[STEP] 생성 중지(STOP) 클릭")
 
-    # then
     stop_message = ppt_page.get_stop_message_text()
     print(f"[RESULT] 중지 멘트: {stop_message}")
 

@@ -16,7 +16,6 @@ def test_quiz_generation_stop(driver):
     print("\n==============================")
     print("[TEST START] QUIZ Generation Stop")
 
-    # given
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
@@ -59,7 +58,6 @@ def test_quiz_generation_stop(driver):
     quiz_page.click_stop_icon()
     print("[STEP] 생성 중지(STOP) 클릭")
 
-    # then
     stop_message = quiz_page.get_stop_message_text()
     print(f"[RESULT] 중지 멘트: {stop_message}")
 

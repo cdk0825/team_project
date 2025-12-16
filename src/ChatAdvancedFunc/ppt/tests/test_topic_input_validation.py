@@ -27,8 +27,7 @@ def test_topic_input_validation(driver, topic, expect_error):
     
     print("\n==============================")
     print("[TEST START] Topic Input Validation")
-    
-    # given
+
     login(driver, "qa3team01@elicer.com", "20qareset25elice!")
     print("[STEP] 관리자 로그인 완료")
 
@@ -43,11 +42,9 @@ def test_topic_input_validation(driver, topic, expect_error):
     ppt_page.clear_inputs()
     print("[STEP] 입력값 초기화")
 
-    # when
     ppt_page.enter_topic(topic)
     print("[STEP] 주제 입력 완료")
 
-    # then
     error_text = ppt_page.get_topic_error_text()
     print(f"[RESULT] error_text: {error_text}")
 
