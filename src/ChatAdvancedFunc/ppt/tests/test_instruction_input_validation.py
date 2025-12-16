@@ -1,6 +1,7 @@
 import pytest
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils import login
+from src.config import USERNAME1, PASSWORD1
 
 # 2000자 초과 테스트 데이터
 LONG_INSTRUCTION = (
@@ -46,7 +47,7 @@ def test_instruction_input_validation(driver, instruction, expect_error):
     print("\n==============================")
     print("[TEST START] Instruction Input Validation")
 
-    login(driver, "qa3team01@elicer.com", "20qareset25elice!")
+    login(driver, USERNAME1, PASSWORD1)
     print("[STEP] 관리자 로그인 완료")
 
     ppt_page = PPTCreatePage(driver)

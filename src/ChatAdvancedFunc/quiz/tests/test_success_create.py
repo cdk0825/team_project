@@ -1,5 +1,6 @@
 import pytest
 from src.utils import login
+from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 def test_success_create(driver):
@@ -14,7 +15,7 @@ def test_success_create(driver):
     print("\n==============================")
     print("[TEST START] QUIZ Success Create")
     
-    login(driver, "qa3team01@elicer.com", "20qareset25elice!")
+    login(driver, USERNAME1, PASSWORD1)
     print("[STEP] 관리자 로그인 완료")
 
     quiz_page = QUIZCreatePage(driver)

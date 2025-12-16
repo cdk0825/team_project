@@ -1,6 +1,7 @@
 import pytest
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils import login
+from src.config import USERNAME1, PASSWORD1
 
 
 @pytest.mark.parametrize(
@@ -25,7 +26,7 @@ def test_section_slide_rules(driver, section_count, slide_count, should_create):
     """
     print("\n [TEST START] Section / Slide Business Rules Validation")
 
-    login(driver, "qa3team01@elicer.com", "20qareset25elice!")
+    login(driver, USERNAME1, PASSWORD1)
     print("[STEP] 관리자 로그인 완료")
 
     ppt_page = PPTCreatePage(driver)

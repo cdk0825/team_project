@@ -1,5 +1,6 @@
 import pytest
 from src.utils import login
+from src.config import USERNAME4, PASSWORD4
 from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 @pytest.mark.parametrize("skip_option, skip_difficulty, skip_topic, expect_topic_error", [
@@ -18,7 +19,7 @@ def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty
     print("[TEST START] Quiz Input Validation")
     
     # 로그인(초기화 기능 이슈로 이전 퀴즈 생성 기록이 없는 계정이어야함)
-    login(driver, "qa3team0104@elicer.com", "team01cheerup!")
+    login(driver, USERNAME4, PASSWORD4)
     print("[STEP] 로그인 완료")
 
     quiz_page = QUIZCreatePage(driver)

@@ -1,5 +1,6 @@
 import pytest
 from src.utils import login
+from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 @pytest.mark.parametrize("option_type", ["single", "multi", "subjective"])
@@ -13,7 +14,7 @@ def test_quiz_option_type_result(driver, option_type):
     print("\n==============================")
     print(f"[TEST START] Quiz Option Type: {option_type}")
 
-    login(driver, "qa3team01@elicer.com", "20qareset25elice!")
+    login(driver, USERNAME1, PASSWORD1)
     print("[STEP] 로그인 완료")
 
     quiz_page = QUIZCreatePage(driver)

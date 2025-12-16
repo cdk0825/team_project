@@ -3,10 +3,9 @@ from src.pages.side_menu_page import SideMenu
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
-from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPN, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, SCROLL_PAUSE_TIME, INDEX_ATTRIBUTE)
+from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, SCROLL_PAUSE_TIME, INDEX_ATTRIBUTE)
 from selenium.webdriver.common.keys import Keys
 from src.utils import capture_screenshot
-import time
 import re
 from src.pages.chat_basic_page import chatBasicPage
 
@@ -32,7 +31,7 @@ class MainPage:
         # 히스토리 메뉴
         self.HISTORY_MENU_MODAL = (By.CSS_SELECTOR, ".MuiMenu-list[role='menu']")
         self.HISTORY_RENAME_BTN = (By.XPATH, f"//span[contains(text(), '{TITLE_RENAME_BUTTON_PARAGRAPH}')]/parent::div/parent::li")
-        self.HISTORY_DELETE_BTN = (By.XPATH, f"//p[contains(text(), '{HISTORY_DELETE_BUTTON_PARAGRAPN}')]/parent::div/parent::li")
+        self.HISTORY_DELETE_BTN = (By.XPATH, f"//p[contains(text(), '{HISTORY_DELETE_BUTTON_PARAGRAPH}')]/parent::div/parent::li")
         
         # 이름 변경 모달
         self.RENAME_MODAL = (By.XPATH, f"//h2[contains(text(), '{RENAME_MODAL_TITLE}')]/parent::div[@role='dialog']")
@@ -68,29 +67,9 @@ class MainPage:
         scroll_script = f"document.evaluate(\"{scrollable_container_xpath}\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollTop = 0;"
         self.driver.execute_script(scroll_script)
 
-    def count_all_history_items(self, scrollable_container_xpath="//div[@data-testid='virtuoso-scroller']"):
-        """ 가상화된 히스토리 목록의 개수 세기 """
-        def get_last_valid_index(elements, attribute_name):
-            """ 마지막 data-item-index 값 찾기 """
-            for ele in reversed(elements):
-                index_value = ele.get_attribute(attribute_name)
-                if index_value is not None:
-                    return int(index_value)
-            return 0
-
-        scroll_script = f"document.evaluate(\"{scrollable_container_xpath}\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollTop = document.evaluate(\"{scrollable_container_xpath}\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollHeight;"
-        self.driver.execute_script(scroll_script)
-
-        time.sleep(SCROLL_PAUSE_TIME)
-
-        history_elements = self.driver.find_elements(*self.HISTORY_LIST)
-        last_index = get_last_valid_index(history_elements, INDEX_ATTRIBUTE)
-
-        return last_index + 1
-
     def get_first_history(self):
         """ 첫 번째 히스토리 가져오기 """
-        first_history = self.driver.find_element(*self.FIRST_HISTORY)
+        first_history = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.FIRST_HISTORY))
         return first_history
             
     def find_history_menu(self, i=0):
@@ -141,24 +120,33 @@ class MainPage:
         save_btn = history_menu_modal.find_element(*self.RENAME_SAVE_BTN)
         save_btn.click()
 
-        WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.TOAST_MESSAGE))
-        time.sleep(0.5)
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(self.TOAST_MESSAGE))
         capture_screenshot(self.driver, title="modify_history")    
         print(f"✅ 액션: 인덱스 {i}의 히스토리 이름을 '{keyword}'으로 변경 완료")
 
-    def delete_history(self, i=0):
-        """ i번째 히스토리를 삭제 """
+    def delete_history_menu_select(self, i=0):
         history_menu_modal = self.find_history_menu(i)
         history_delete_btn = history_menu_modal.find_element(*self.HISTORY_DELETE_BTN)
         history_delete_btn.click()
 
+        return history_menu_modal
+
+    def delete_history(self, i=0):
+        """ i번째 히스토리를 삭제 """
+        history_menu_modal = self.delete_history_menu_select(i)
+
         delete_btn = history_menu_modal.find_element(*self.HISTORY_DELETE_CONFIRM_BTN)
         delete_btn.click()
 
-        WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.TOAST_MESSAGE))
-        time.sleep(0.5)
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(self.TOAST_MESSAGE))
         capture_screenshot(self.driver, title="delete_history")    
         print(f"✅ 액션: 인덱스 {i}의 히스토리 항목 삭제 완료")
+
+    def delete_history_cancel(self, i=0):
+        history_menu_modal = self.delete_history_menu_select(i)
+
+        cancel_btn = history_menu_modal.find_element(*self.CANCEL_BTN)
+        cancel_btn.click()
 
     def check_rename_validation_empty(self):
         """ 타이틀에 빈 값 입력 시 유효성 검사 상태 확인 """
@@ -174,8 +162,6 @@ class MainPage:
     def check_rename_validation_max_length(self, keyword):
         """ 최대 길이 테스트 후 실제 저장된 타이틀 값 반환 """
         self.modify_history_title(keyword, 0)
-
-        time.sleep(5)
         history_menu_modal_reopen = self.find_history_menu(i=0)
 
         # 이름 변경 버튼 클릭
@@ -200,8 +186,6 @@ class MainPage:
         """ 이름 수정 후 히스토리 목록이 재정렬되는지 확인 """
 
         self.modify_history_title(keyword, i)
-        time.sleep(5)
-
         after_texts = self.get_all_history_texts()
         is_reordered = after_texts[i] == keyword
         return is_reordered
@@ -242,11 +226,11 @@ class MainPage:
         # 입력창 초기화
         keyword_input.send_keys(Keys.CONTROL, 'a', Keys.DELETE)
         keyword_input.send_keys(keyword)
-        time.sleep(5)
-
+        
         count = 0
         try:
-            search_result = dialog.find_element(*self.HISTORY_SEARCH_LIST)
+            #search_result = dialog.find_element(*self.HISTORY_SEARCH_LIST)
+            search_result = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.HISTORY_SEARCH_LIST))
             history_items = search_result.find_elements(*self.HISTORY_ITEM)
             count = len(history_items)
         except:

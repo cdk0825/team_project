@@ -3,7 +3,7 @@ from src.pages.side_menu_page import SideMenu
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from src.pages.agent_page_constants import AGENT_SEARCH_BUTTON_PARAGRAPH, NO_RESULT_FOUND_PARAGRAPH
 
 class AgentPage:
@@ -45,24 +45,24 @@ class AgentPage:
         def check_result_state(driver):
             list_section = driver.find_element(*self.AGENT_LIST)
             if list_section.is_displayed():
-                return list_section
+                return True
             no_result = driver.find_element(*self.NO_RESULT_MESSAGE)
             if no_result.is_displayed():
-                return no_result
+                return True
             return False
         try:
-            result = WebDriverWait(self.driver, 10).until(check_result_state)
-            if result == NO_RESULT_FOUND_PARAGRAPH:
+            WebDriverWait(self.driver, 10).until(check_result_state)
+            no_result_element = self.driver.find_element(*self.NO_RESULT_MESSAGE)
+            if no_result_element.is_displayed():
                 return []
-            agent_list_elements = result.find_elements(*self.AGENT_LIST_TITLES)
-            agent_list_texts = [e.text for e in agent_list_elements]
+        except NoSuchElementException:
+            pass
 
-            contains_keyword_list = []
-            for text in agent_list_texts:
-                if keyword in text:
-                    contains_keyword_list.append(text)
-
+        try:
+            list_section = self.driver.find_element(*self.AGENT_LIST)
+            agent_list_elements = list_section.find_elements(*self.AGENT_LIST_TITLES)
+            contains_keyword_list = [e.text for e in agent_list_elements if keyword in e.text]
             return contains_keyword_list
-        except TimeoutException:
-            print(f"DEBUG: 키워드 '{keyword}'에 대한 검색 결과 목록 섹션({self.AGENT_LIST})이 10초 안에 나타나지 않았습니다. (검색 결과 없음으로 간주)")
+        
+        except NoSuchElementException:
             return []

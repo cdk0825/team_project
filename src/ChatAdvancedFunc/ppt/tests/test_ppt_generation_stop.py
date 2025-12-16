@@ -1,5 +1,6 @@
 import pytest
 from src.utils import login
+from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 
 
@@ -15,7 +16,7 @@ def test_ppt_generation_stop(driver):
     print("\n==============================")
     print("[TEST START] PPT Generation Stop")
 
-    login(driver, "qa3team01@elicer.com", "20qareset25elice!")
+    login(driver, USERNAME1, PASSWORD1)
     print("[STEP] 관리자 로그인 완료")
 
     ppt_page = PPTCreatePage(driver)
