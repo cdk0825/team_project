@@ -1,5 +1,5 @@
-from src.resources.testdata.test_data import EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, FIELDSET_OUTLINE_COLOR, MAX_LENGTH_TITLE
-
+from src.resources.testdata.test_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, FIELDSET_OUTLINE_COLOR, MAX_LENGTH_TITLE, MODIFY_TITLE_NAME, NEW_SESSION_CHAT_KEYWORD, NEW_KEYWORD)
+from src.pages.chat_basic_page import chatBasicPage
 import time
 
 # 새 대화 세션 생성 테스트
@@ -38,7 +38,7 @@ def test_modify_history_title(logged_in_main_page_setup):
 
     before_history_title = main.get_first_history().text
     print(f"변경 전 히스토리 타이틀: {before_history_title}")
-    main.modify_first_history()
+    main.modify_history_title(MODIFY_TITLE_NAME, 0)
 
     time.sleep(5)
     after_history_title = main.get_first_history().text
@@ -55,7 +55,7 @@ def test_delete_history(logged_in_main_page_setup):
 
     main.scroll_to_top()
 
-    main.delete_first_history()
+    main.delete_history(0)
     time.sleep(5)
 
     after_total_histories = main.count_all_history_items()
@@ -70,7 +70,7 @@ def test_modify_history_title_to_empty(logged_in_main_page_setup):
     print("\n🆕 [F1HEL-T10] TC 실행")
     main = logged_in_main_page_setup
 
-    fieldset_color, is_enabled = main.modify_history_title_empty()
+    fieldset_color, is_enabled = main.check_rename_validation_empty()
     assert fieldset_color == FIELDSET_OUTLINE_COLOR, "❌ fieldset의 outline 색상이 제대로 변경되지 않았습니다."
     print(f"✅ fieldset outline 색상: {fieldset_color}")
 
@@ -85,7 +85,7 @@ def test_max_length_title_edit_and_verification(logged_in_main_page_setup):
     before_text_length = len(MAX_LENGTH_TITLE)
     print(f"입력된 글자 수: {before_text_length}")
 
-    modified_text = main.modify_history_title_max_length(MAX_LENGTH_TITLE)
+    modified_text = main.check_rename_validation_max_length(MAX_LENGTH_TITLE)
     after_text_length = len(modified_text)
     print(f"변경된 타이틀: {modified_text}")
     print(f"변경된 글자 수: {after_text_length}")
@@ -99,4 +99,63 @@ def test_modify_and_reorder(logged_in_main_page_setup):
     print("\n🆕 [F1HEL-T12] TC 실행")
     main = logged_in_main_page_setup
     
+    is_reordered = main.check_modify_and_order(MODIFY_TITLE_NAME, 1)
+    if is_reordered:
+        print(f"✅ 검증 성공: 타이틀 수정으로 항목의 순서가 변경되지 않았습니다.")
+    else:
+        print(f"❌ 검증 실패: 타이틀 수정 후 항목의 순서가 변경되었습니다.")
+
     print("🔚 [F1HEL-T12] TC 종료")
+
+def test_history_is_created_from_new_chat(driver, logged_in_main_page_setup):
+    print("\n🆕 [F1HEL-T15] TC 실행")
+    main = logged_in_main_page_setup
+    main.setup_function_with_precondition(NEW_SESSION_CHAT_KEYWORD)
+
+    first_history_title = main.get_first_history().text
+    chat_id = main.get_chat_id_from_url()
+
+    assert chat_id is not None, "❌ 새로운 채팅 시작 및 메시지 전송 후, URL에 유효한 Chat ID가 생성되지 않았습니다."
+    assert first_history_title in NEW_SESSION_CHAT_KEYWORD, "❌ 히스토리 목록이 생성되지 않았습니다."
+    print(f"✅ 검증 성공: 현재 세션의 chat_id: {chat_id}")
+    
+    print("🔚 [F1HEL-T15] TC 종료")
+
+def test_history_search_case_sensitive(logged_in_main_page_setup):
+    print("\n🆕 [F1HEL-T18] TC 실행")
+    main = logged_in_main_page_setup
+    main.setup_function_with_precondition(NEW_KEYWORD)
+    
+    lower_new_keyword = NEW_KEYWORD.lower()
+    upper_new_keyword = NEW_KEYWORD.upper()
+
+    count_lower = main.search_history_with_keyword(lower_new_keyword)
+    count_upper = main.search_history_with_keyword(upper_new_keyword)
+    assert count_lower == count_upper, "❌ 대소문자 검색 결과가 다릅니다."
+    print(f"✅ 검증 성공: {NEW_KEYWORD}가 대소문자 구분 없이 정상적으로 검색되었습니다.")
+
+    print("🔚 [F1HEL-T18] TC 종료")
+
+def test_search_rename_title(logged_in_main_page_setup):
+    print("\n🆕 [F1HEL-T19] TC 실행")
+    main = logged_in_main_page_setup
+    main.setup_function_with_precondition(NEW_KEYWORD)
+
+    count_before_keyword = main.search_history_with_keyword(NEW_KEYWORD)
+    count_after_keyword = main.search_history_with_keyword(MODIFY_TITLE_NAME)
+
+    print(f"{NEW_KEYWORD}로 검색 결과: {count_before_keyword}")
+    print(f"{MODIFY_TITLE_NAME}로 검색 결과: {count_after_keyword}")
+
+    main.modify_history_title(keyword=MODIFY_TITLE_NAME)
+
+    modified_count_before_keyword = main.search_history_with_keyword(NEW_KEYWORD)
+    modified_count_after_keyword = main.search_history_with_keyword(MODIFY_TITLE_NAME)
+
+    print(f"수정 후 {NEW_KEYWORD}로 검색 결과: {modified_count_before_keyword}")
+    print(f"수정 후 {MODIFY_TITLE_NAME}로 검색 결과: {modified_count_after_keyword}")
+    
+    assert count_before_keyword - 1 == modified_count_before_keyword and count_after_keyword + 1 == modified_count_after_keyword, "❌ 변경된 타이틀이 정상적으로 검색되지 않았습니다."
+    print(f"✅ 검증 성공: 변경된 타이틀이 정상적으로 검색되었습니다.")
+
+    print("🔚 [F1HEL-T19] TC 종료")

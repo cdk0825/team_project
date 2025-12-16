@@ -11,19 +11,19 @@ class AgentPage:
         self.driver = driver
         self.side_menu = SideMenu(driver)
 
-        self.AGENT_LIST = (By.CSS_SELECTOR, ".MuiGrid-container")
-
+       # 요소 선택
         self.AGENT_SEARCH_INPUT = (By.XPATH,  f"//input[contains(@placeholder, '{AGENT_SEARCH_BUTTON_PARAGRAPH}')]")
-
+        self.AGENT_LIST = (By.CSS_SELECTOR, ".MuiGrid-container")
         self.AGENT_LIST_TITLES = (By.CSS_SELECTOR, ".MuiTypography-root")
-
         self.NO_RESULT_MESSAGE = (By.XPATH, f"//h6[contains(text(), '{NO_RESULT_FOUND_PARAGRAPH}')]")
 
     def check_agent_list(self):
+        """ 에이전트 목록 섹션 화면 출력 여부 확인 """
         agent_list = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.AGENT_LIST))
         return agent_list.is_displayed()
     
     def input_search_keyword(self, keyword):
+        """ 검색 필드에 키워드를 입력해 에이전트 목록 검색 """
         search_field = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.AGENT_SEARCH_INPUT))
         search_field.click()
 
@@ -32,8 +32,16 @@ class AgentPage:
         search_field.send_keys(Keys.DELETE)
         # 키워드 입력
         search_field.send_keys(keyword)
+
+    def check_no_result_message_is_displayed(self):
+        try:
+            WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.NO_RESULT_MESSAGE))
+            return True
+        except TimeoutException:
+            return False
     
     def count_keyword_list(self, keyword):
+        """ 검색 결과 목록을 확인하고, 결과에서 주어진 키워드를 포함하는 항목 리스트 반환 """
         def check_result_state(driver):
             list_section = driver.find_element(*self.AGENT_LIST)
             if list_section.is_displayed():

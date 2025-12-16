@@ -1,6 +1,6 @@
 from src.pages.agent_page import AgentPage
 import time
-from src.resources.testdata.test_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD
+from src.resources.testdata.test_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD
 
 
 def test_agent_lists(logged_in_driver):
@@ -19,7 +19,7 @@ def test_agent_lists(logged_in_driver):
     print("✅ 액션: 에이전트 목록 확인됨")
     print("🔚 [F1HEL-T4] TC 종료")
 
-def test_search_agent_success(logged_in_driver):
+def test_agent_search_success(logged_in_driver):
     print("\n🆕 [F1HEL-T5] TC 실행")
     driver = logged_in_driver
     agent = AgentPage(driver)
@@ -42,3 +42,17 @@ def test_search_agent_success(logged_in_driver):
     print("✅ 검증 성공: 기대 결과와 실제 결과가 일치합니다.")
 
     print("🔚 [F1HEL-T4] TC 종료")
+
+def test_agent_search_no_result(logged_in_driver):
+    print("\n🆕 [F1HEL-T14] TC 실행")
+    driver = logged_in_driver
+    agent = AgentPage(driver)
+    agent.side_menu.click_agent_search_btn()
+
+    agent.input_search_keyword(NON_EXISTENT_KEYWORD)
+    is_message_displayed = agent.check_no_result_message_is_displayed()
+
+    assert is_message_displayed is True, f"❌ 검증 실패: 키워드 {NON_EXISTENT_KEYWORD} 검색 후 '검색 결과 없음' 메시지가 10초 내에 표시되지 않았습니다."
+    print("✅ 검증 성공: 키워드 {NON_EXISTENT_KEYWORD} 검색 후 '검색 결과 없음' 메시지가 정상적으로 표시되었습니다.")
+    print("🔚 [F1HEL-T14] TC 종료")
+
