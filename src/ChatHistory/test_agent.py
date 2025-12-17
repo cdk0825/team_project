@@ -1,5 +1,5 @@
 from src.pages.agent_page import AgentPage
-from src.resources.testdata.test_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD
+from src.resources.testdata.test_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD, QA_AGENT_TITLE
 import pytest
 import logging
 
@@ -79,3 +79,22 @@ def test_agent_search_no_result(logged_in_driver):
     logger.info(f"✅ 검증 성공: 키워드 '{NON_EXISTENT_KEYWORD}' 검색 후 '검색 결과 없음' 메시지가 정상적으로 표시되었습니다.")
     logger.info("--- 🔚 [F1HEL-T14] TC 종료 ---")
 
+def test_make_session_using_agent(logged_in_driver):
+    logger.info("--- 🆕 [F1HEL-T105] TC 실행: 에이전트를 클릭하여 해당 에이전트로 새 세션 생성 ---")
+    driver = logged_in_driver
+    agent = AgentPage(driver)
+    
+    agent.side_menu.click_agent_search_btn()
+    agent.input_search_keyword("QA")
+
+    agent.wait_for_skeleton_disappear()
+
+    agent.click_agent_button()
+
+    agent.wait_for_skeleton_disappear()
+
+    agent_title = agent.get_agent_title()
+    assert QA_AGENT_TITLE == agent_title, "❌ 선택한 에이전트로 새로운 세션이 만들어지지 않았습니다."
+    logger.info(f"✅ 검증 성공: {agent_title}로 새로운 세션이 생성되었습니다.")
+
+    logger.info("--- 🔚 [F1HEL-T105] TC 종료 ---")

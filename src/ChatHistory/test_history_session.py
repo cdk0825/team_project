@@ -1,4 +1,4 @@
-from src.resources.testdata.test_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, NEW_SESSION_CHAT_KEYWORD)
+from src.resources.testdata.test_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, NEW_SESSION_CHAT_KEYWORD, PAST_SESSION_CHAT_KEYWORD)
 import logging
 import pytest
 
@@ -46,7 +46,7 @@ def test_history_is_created_from_new_chat(logged_in_main_page_setup):
     main.setup_function_with_precondition(NEW_SESSION_CHAT_KEYWORD)
 
     first_history_title = main.get_first_history().text
-    chat_id = main.get_chat_id_from_url()
+    chat_id = main.extract_chat_id(url=main.driver.current_url)
 
     if chat_id is None:
         logger.error("❌ 새로운 채팅 시작 및 메시지 전송 후, URL에 유효한 Chat ID가 생성되지 않았습니다.")
@@ -60,3 +60,26 @@ def test_history_is_created_from_new_chat(logged_in_main_page_setup):
     logger.info("✅ 검증 성공: 히스토리 목록이 정상적으로 생성되었습니다.")
     
     logger.info("--- 🔚 [F1HEL-T15] TC 종료 ---")
+
+@pytest.mark.xfail(reason="과거의 세션에 채팅을 새로 입력했을 때 히스토리가 재정렬되지 않음")
+def test_reorder_history_on_past_session_chat(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T122] TC 실행: 과거의 세션에 채팅을 입력했을 때 히스토리가 재정렬되는지 테스트 ---")
+    main = logged_in_main_page_setup
+
+    history_list = main.get_history_list()
+    history_list[1].click()
+    target_history_title = history_list[1].text
+
+    main.wait_for_skeleton_disappear()
+
+    main.chat_page.send_message(PAST_SESSION_CHAT_KEYWORD)
+    main.chat_page.wait_for_loadinngIcon()
+
+    main.driver.refresh()
+
+    recent_history_title = main.get_first_history().text
+    logger.info(f"채팅을 새로 입력한 세션: {target_history_title}, 가장 최근 세션: {recent_history_title}")
+    assert target_history_title == recent_history_title, "❌ 히스토리가 재정렬되지 않았습니다."
+    logger.info("✅ 검증 성공: 히스토리가 재정렬되었습니다.")
+
+    logger.info("--- 🔚 [F1HEL-T122] TC 종료 ---")

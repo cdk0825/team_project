@@ -1,7 +1,7 @@
-from src.resources.testdata.test_data import NEW_KEYWORD, MODIFY_TITLE_NAME
+from src.resources.testdata.test_data import NEW_KEYWORD, MODIFY_TITLE_NAME, SPECIAL_CHAR_SAMPLES, NONE_TEXT
 import logging
 import pytest
-
+import time
 # 로거 설정
 logging.basicConfig(
     level=logging.INFO,
@@ -49,7 +49,7 @@ def test_history_search_case_sensitive(logged_in_main_page_setup):
     logger.info("--- 🔚 [F1HEL-T18] TC 종료 ---")
 
 def test_search_rename_title(logged_in_main_page_setup):
-    logger.info("--- 🆕 [F1HEL-T19] TC 실행: 타이틀 수정 후 검색 확인 ---")
+    logger.info("--- 🆕 [F1HEL-T19] TC 실행: 타이틀 수정 후 변경된 타이틀로 검색 ---")
     main = logged_in_main_page_setup
     
     # 전제 조건: 검색 대상 히스토리 항목 생성
@@ -83,3 +83,59 @@ def test_search_rename_title(logged_in_main_page_setup):
     logger.info(f"✅ 검증 성공: 변경된 타이틀이 정상적으로 검색되었습니다.")
 
     logger.info("--- 🔚 [F1HEL-T19] TC 종료 ---")
+
+def test_history_search_with_title(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T36] TC 실행: 타이틀로 히스토리 검색 ---")
+    main = logged_in_main_page_setup
+    count_keyword = main.search_history_with_keyword(NEW_KEYWORD)
+
+    logger.info(f"✅ {NEW_KEYWORD}가 포함된 {count_keyword}개의 히스토리가 검색되었습니다.")
+
+    logger.info("--- 🔚 [F1HEL-T36] TC 종료 ---")
+
+@pytest.mark.parametrize("special_char, description", SPECIAL_CHAR_SAMPLES)
+def test_history_search_with_special_characters(logged_in_main_page_setup, special_char, description):
+    logger.info("--- 🆕 [F1HEL-T38] TC 실행: 특수문자로 히스토리 검색 ---")
+    main = logged_in_main_page_setup
+    logger.info(f"--- TC 실행: {description} ({special_char}) 검색 확인 ---")
+
+    main.setup_function_with_precondition(special_char)
+
+    count = main.search_history_with_keyword(special_char)
+
+    assert count > 0, f"❌ 오류: '{description}'({special_char}) 검색 결과가 0개입니다."
+
+    logger.info("--- 🔚 [F1HEL-T38] TC 종료 ---")
+
+def test_history_search_no_result(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T104] TC 실행: 히스토리 검색 결과가 없을 때 오류 메시지 표시 ---")
+    main = logged_in_main_page_setup
+    
+    main.side_menu.click_search_history_btn()
+    main.perform_search(NONE_TEXT)
+    is_exist_no_result_msg = main.get_no_result_msg()
+    
+    assert is_exist_no_result_msg, "❌ 오류: '검색 결과가 없습니다.' 메시지가 표시되지 않습니다."
+    logger.info(f"✅ 검증: '검색 결과가 없습니다.' 메시지가 정상적으로 표시되었습니다.")
+
+    logger.info("--- 🔚 [F1HEL-T104] TC 종료 ---")
+
+def test_select_history_in_search_list(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T108] TC 실행: 히스토리 검색 모달의 하단 목록에서 직접 히스토리 선택 ---")
+    main = logged_in_main_page_setup
+
+    main.get_first_history().click()
+    main.wait_for_skeleton_disappear()
+
+    selected_chat_id = main.extract_chat_id(main.driver.current_url)
+
+    main.side_menu.click_search_history_btn()
+
+    main.get_first_history_id_in_search_modal().click()
+    main.wait_for_skeleton_disappear()
+
+    first_history_chat_id = main.extract_chat_id(main.driver.current_url)
+    assert selected_chat_id == first_history_chat_id, "❌ 오류: "
+    logger.info(f"before: {selected_chat_id}, after: {first_history_chat_id}")    
+    
+    logger.info("--- 🔚 [F1HEL-T108] TC 종료 ---")
