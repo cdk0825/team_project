@@ -59,8 +59,9 @@ class MainPage:
         self.DIALOG_CONTAINER = (By.CSS_SELECTOR, ".MuiDialog-container")
         self.HISTORY_SEARCH_INPUT_FIELD = (By.CSS_SELECTOR, "input[type='text'][placeholder='Search']")
         self.HISTORY_SEARCH_EXIT_BTN = (By.XPATH, "//*[@data-icon='xmark']/parent::button")
-        self.HISTORY_SEARCH_LIST = (By.CSS_SELECTOR, "ul.MuiList-root")
-        self.HISTORY_ITEM = (By.CSS_SELECTOR, "li.MuiListItem-root")
+        self.HISTORY_SEARCH_LIST = (By.XPATH, "//div[@role='dialog']//ul[contains(@class, 'MuiList-root')]")
+        self.HISTORY_ITEM = (By.XPATH, "//div[@role='dialog']//li[contains(@class, 'MuiListItem-root')]")
+        self.SKELETON = (By.CSS_SELECTOR, "span.MuiSkeleton-root")
 
     def click_background(self):
         """ 모달 배경 클릭해 창 닫기 """
@@ -102,6 +103,25 @@ class MainPage:
         new_title_input = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(self.RENAME_MODAL_INPUT_FIELD))
         modified_value = new_title_input.get_attribute('value')
         logger.debug(f"검증: 재오픈된 입력 필드 값: {modified_value}")
+
+    def wait_for_skeleton_disappear(self, timeout=10):
+        """
+        스켈레톤(로딩 표시) 요소가 DOM에서 사라지거나 보이지 않게 될 때까지 명시적으로 대기합니다.
+        
+        :param timeout: 최대 대기 시간 (초)
+        :raises TimeoutException: 지정된 시간 내에 스켈레톤이 사라지지 않을 경우 발생
+        """
+        logger.debug(f"검증: 스켈레톤 로딩 요소 ({self.SKELETON}) 사라짐 대기 시작 (최대 {timeout}초)")
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.invisibility_of_element_located(self.SKELETON),
+                message=f"❌ 로딩이 {timeout}초를 초과했습니다. 스켈레톤 요소가 여전히 표시됨."
+            )
+            logger.info("✅ 검증 완료: 스켈레톤 로딩 요소 사라짐 확인 (데이터 로드 완료)")
+            return True
+        except TimeoutException:
+            logger.error(f"❌ 오류: 스켈레톤이 지정된 시간 내에 사라지지 않았습니다.")
+            raise
     
     def click_rename_save_btn(self, target):
         target.find_element(*self.RENAME_SAVE_BTN).click()
@@ -165,6 +185,15 @@ class MainPage:
         
         new_title_input.send_keys(keyword)
         logger.debug(f"액션: 입력 값 '{keyword}' 입력")
+
+    def input_search_field(self, target, keyword):
+        keyword_input = target.find_element(*self.HISTORY_SEARCH_INPUT_FIELD)
+        keyword_input.click()
+
+        # 입력창 초기화 및 키워드 입력
+        self.clear_input_field(keyword_input)
+        keyword_input.send_keys(keyword)
+        logger.debug(f"액션: 검색어 '{keyword}' 입력 완료")
 
     def find_history_menu(self, i=0):
         """ hover 시 나타나는 히스토리 메뉴 찾기 """
@@ -255,7 +284,7 @@ class MainPage:
         logger.info(f"액션: 새 히스토리 생성을 위한 전제 조건 실행 (키워드: '{keyword}')")
         self.side_menu.click_new_chat_btn()
         self.chat_page.send_message(keyword)
-        self.chat_page.wait_for_response()
+        self.chat_page.wait_for_loadinngIcon()
         logger.debug("전제 조건 완료: 메시지 전송 및 응답 대기 완료")
 
     def search_history_with_keyword(self, keyword):
@@ -263,21 +292,17 @@ class MainPage:
         logger.debug(f"액션: 히스토리 검색 모달 열기 및 키워드 '{keyword}' 검색 시작")
         self.side_menu.click_search_history_btn()
         
+        count = 0
         try:
             dialog = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.DIALOG_CONTAINER))
-            keyword_input = dialog.find_element(*self.HISTORY_SEARCH_INPUT_FIELD)
-            keyword_input.click()
+            self.input_search_field(target=dialog, keyword=keyword)
+            
+            self.wait_for_skeleton_disappear()
 
-            # 입력창 초기화 및 키워드 입력
-            keyword_input.send_keys(Keys.CONTROL, 'a', Keys.DELETE)
-            keyword_input.send_keys(keyword)
-            logger.debug(f"액션: 검색어 '{keyword}' 입력 완료")
-            
-            count = 0
-            
-            # 검색 결과 목록을 대기
             search_result = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.HISTORY_SEARCH_LIST))
             history_items = search_result.find_elements(*self.HISTORY_ITEM)
+            found_texts = [item.text for item in history_items]
+            logger.info(f"🔎 실제 발견된 항목 텍스트들: {found_texts}")
             count = len(history_items)
             logger.info(f"검색 결과 확인: '{keyword}'에 대해 {count}개의 항목 발견")
             
