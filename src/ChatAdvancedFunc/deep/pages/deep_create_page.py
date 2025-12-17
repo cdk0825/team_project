@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-import time
 
 
 class DEEPCreatePage:
@@ -25,6 +24,7 @@ class DEEPCreatePage:
     STOP_MESSAGE = (By.XPATH, "//div[contains(text(),'요청에 의해 답변 생성을 중지했습니다.')]")
     
     TOPIC_ERROR_TEXT = (By.XPATH, "//p[text()='1자 이상 500자 이하로 입력해주세요.']")
+    INSTRUCTION_ERROR_TEXT = (By.XPATH, "//p[text()='2000자 이하로 입력해주세요.']")
     
     SUCCESS_MESSAGE = (By.XPATH, "//p[contains(text(),'입력하신 내용 기반으로 심층조사 결과를 생성했습니다')]")
     
@@ -84,3 +84,46 @@ class DEEPCreatePage:
         return self.wait.until(
             EC.visibility_of_element_located(self.DOWNLOAD_BTN)
         ).is_displayed()
+    
+    def blur_topic(self):
+        # 주제 필드 validation 트리거용
+        self.driver.find_element(*self.INSTRUCTION_AREA).click()
+    
+    def blur_instruction(self):
+        self.driver.find_element(By.TAG_NAME, "body").click()
+    
+    def is_create_button_enabled(self):
+        return self.driver.find_element(*self.CREATE_BTN).is_enabled()
+
+    def get_topic_error_text(self):
+        try:
+            return self.wait.until(
+                EC.visibility_of_element_located(self.TOPIC_ERROR_TEXT)
+            ).text
+        except:
+            return None
+    
+    def get_instruction_error_text(self):
+        try:
+            return self.wait.until(
+                EC.visibility_of_element_located(self.INSTRUCTION_ERROR_TEXT)
+            ).text
+        except:
+            return None
+    
+    def click_stop_icon(self):
+        self.wait.until(EC.element_to_be_clickable(self.STOP_ICON)).click()
+
+    def get_stop_message_text(self):
+        try:
+            return self.wait.until(
+                EC.visibility_of_element_located(self.STOP_MESSAGE)
+            ).text
+        except:
+            return None
+    
+    def get_topic_value(self):
+        return self.driver.find_element(*self.TOPIC_INPUT).get_attribute("value")
+
+    def get_instruction_value(self):
+        return self.driver.find_element(*self.INSTRUCTION_AREA).get_attribute("value")
