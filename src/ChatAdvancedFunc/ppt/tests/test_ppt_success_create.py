@@ -2,9 +2,10 @@ import pytest
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
+from src.utils.file_utils import wait_for_download
 
 
-def test_success_create(driver):
+def test_success_create(driver, download_dir):
     """
     PPT 정상 생성 테스트
     - 필수 입력값 입력
@@ -64,8 +65,18 @@ def test_success_create(driver):
     print("[RESULT] 다운로드 버튼 확인")
 
     assert download_btn.is_displayed()
-
     print("[ASSERT PASS] 다운로드 버튼 정상 노출")
+    
+    print("[ASSERT] 다운로드 버튼 클릭")
+    download_btn.click()
+
+    downloaded_file = wait_for_download(download_dir, timeout=60)
+    print(f"[RESULT] 다운로드된 파일: {downloaded_file}")
+
+    assert downloaded_file is not None, "파일이 다운로드되지 않음"
+    assert downloaded_file.endswith(".pptx"), (
+        f"다운로드 파일 확장자 오류: {downloaded_file}"
+    )
 
     print("[TEST END] PPT Success Create")
     print("==============================\n")
