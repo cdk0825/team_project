@@ -1,7 +1,6 @@
 EXPECTED_AGENT_URL = "/ai-helpy-chat/agents"
 SEARCN_AGENT_KEYWORD = "project"
 EXPECTED_CHAT_URL = "/ai-helpy-chat"
-FIELDSET_OUTLINE_COLOR = "rgb(198, 40, 40)"
 
 # HISTORY
 MODIFY_TITLE_NAME = "수정된이름"
