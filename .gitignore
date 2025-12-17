@@ -11,6 +11,6 @@ __pycache__/
 
 .env
 
-reports/screenshots/*
+**/screenshots/**
 
 downloads/
