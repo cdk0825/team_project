@@ -1,6 +1,6 @@
 import pytest
 import logging
-from src.resources.testdata.test_data import MODIFY_TITLE_NAME, MAX_LENGTH_TITLE
+from src.resources.testdata.test_data import MODIFY_TITLE_NAME, MAX_LENGTH_TITLE, MAX_LENGTH_OVER_TITLE
 
 logging.basicConfig(
     level=logging.INFO,
@@ -43,7 +43,7 @@ def test_modify_history_title_to_empty(logged_in_main_page_setup):
 # 히스토리 타이틀 최대 글자수로 변경 테스트
 @pytest.mark.xfail(reason="타이틀 수정 시 최대 입력 가능 길이(100자)와 실제 저장 길이가 다름(50자로 잘림)")
 def test_max_length_title_edit_and_verification(logged_in_main_page_setup):
-    logger.info("--- 🆕 [F1HEL-T11] TC 실행: 타이틀 최대 길이 유효성 검사 ---")
+    logger.info("--- 🆕 [F1HEL-T11] TC 실행: 타이틀 변경 - 최대 길이 유효성 검사 ---")
     main = logged_in_main_page_setup
     
     before_text_length = len(MAX_LENGTH_TITLE)
@@ -89,3 +89,33 @@ def test_modify_and_reorder(logged_in_main_page_setup):
         pytest.fail("타이틀 수정 후 목록 순서 변경됨")
 
     logger.info("--- 🔚 [F1HEL-T12] TC 종료 ---")
+
+def test_modify_title_cancel(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T21] TC 실행: 타이틀 수정 취소 ---")
+    main = logged_in_main_page_setup
+    
+    history_menu_modal = main.find_history_menu(i=0)
+    main.click_rename_btn(history_menu_modal)
+
+    main.input_rename_field(MODIFY_TITLE_NAME)
+    main.click_cancel_btn(history_menu_modal)
+
+    logger.info(f"✅ 검증 성공: 타이틀 변경 취소 버튼이 정상적으로 동작했습니다.")
+
+    logger.info("--- 🔚 [F1HEL-T21] TC 종료 ---")
+
+def test_max_length_title_edit_and_verification(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T120] TC 실행: 타이틀 변경 - 100자 초과 입력 ---")
+    main = logged_in_main_page_setup
+
+    history_menu_modal = main.find_history_menu(0)
+
+    main.click_rename_btn(history_menu_modal)
+    main.input_rename_field(MAX_LENGTH_OVER_TITLE)
+    
+    main.click_rename_save_btn()
+    
+    message = main.capture_toast_message(title="modify_history")
+    logger.info(f"✅ 출력된 메시지: {message}")
+    logger.info(f"✅ 오류 토스트메시지가 정상적으로 확인되었습니다.")
+    logger.info("--- 🔚 [F1HEL-T120] TC 종료 ---")

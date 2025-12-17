@@ -25,6 +25,10 @@ class AgentPage:
         self.AGENT_LIST_TITLES = (By.CSS_SELECTOR, ".MuiTypography-root")
         self.NO_RESULT_MESSAGE = (By.XPATH, f"//h6[contains(text(), '{NO_RESULT_FOUND_PARAGRAPH}')]")
 
+        self.SKELETON = (By.CSS_SELECTOR, "span.MuiSkeleton-root")
+        self.AGENT_BUTTON = (By.XPATH, f"//div[contains(@class, 'virtuoso-grid-item')]//a[contains(@class, 'MuiCard-root')]")
+        self.AGENT_TITLE = (By.XPATH, f"//div[contains(@class, 'MuiBox-root')]//h6[contains(@class, 'MuiTypography-h6')]")
+
     def get_agent_list(self):
         return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.AGENT_LIST))
 
@@ -33,6 +37,28 @@ class AgentPage:
     
     def get_no_result_msg(self):
         return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.NO_RESULT_MESSAGE))
+
+    def get_agent_title(self):
+        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.AGENT_TITLE)).text
+
+    def wait_for_skeleton_disappear(self, timeout=10):
+        """
+        스켈레톤(로딩 표시) 요소가 DOM에서 사라지거나 보이지 않게 될 때까지 명시적으로 대기
+        """
+        logger.debug(f"검증: 스켈레톤 로딩 요소 ({self.SKELETON}) 사라짐 대기 시작 (최대 {timeout}초)")
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.invisibility_of_element_located(self.SKELETON),
+                message=f"❌ 로딩이 {timeout}초를 초과했습니다. 스켈레톤 요소가 여전히 표시됨."
+            )
+            logger.info("✅ 검증 완료: 스켈레톤 로딩 요소 사라짐 확인 (데이터 로드 완료)")
+            return True
+        except TimeoutException:
+            logger.error(f"❌ 오류: 스켈레톤이 지정된 시간 내에 사라지지 않았습니다.")
+            raise
+
+    def click_agent_button(self):
+        WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.AGENT_BUTTON)).click()
 
     def clear_input_field(self, target):
         target.send_keys(Keys.CONTROL, 'a', Keys.DELETE)

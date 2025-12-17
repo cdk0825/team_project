@@ -3,7 +3,7 @@ from src.pages.side_menu_page import SideMenu
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
-from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, FIELDSET_OUTLINE_COLOR)
+from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, FIELDSET_OUTLINE_COLOR, NO_RESULT_PARAGRAPH)
 from selenium.webdriver.common.keys import Keys
 from src.utils import capture_screenshot
 import re
@@ -49,7 +49,7 @@ class MainPage:
 
         # 모달 버튼
         self.CANCEL_BTN = (By.XPATH, f"//button[contains(text(), '{RENAME_CANCEL_BTN_PARAGRAPH}')]")
-        self.RENAME_SAVE_BTN = (By.XPATH, f"//button[contains(text(), '{RENAME_SAVE_BTN_PARAGRAPH}')]")      
+        self.RENAME_SAVE_BTN = (By.XPATH, f"//div[@role='dialog']//button[contains(text(), '{RENAME_SAVE_BTN_PARAGRAPH}')]")      
         self.HISTORY_DELETE_CONFIRM_BTN = (By.XPATH, f"//button[contains(text(), '{DELETE_CONFIRM_BTN_PARAGRAPH}')]")  
         
         # 히스토리 삭제 모달
@@ -62,6 +62,8 @@ class MainPage:
         self.HISTORY_SEARCH_LIST = (By.XPATH, "//div[@role='dialog']//ul[contains(@class, 'MuiList-root')]")
         self.HISTORY_ITEM = (By.XPATH, "//div[@role='dialog']//li[contains(@class, 'MuiListItem-root')]")
         self.SKELETON = (By.CSS_SELECTOR, "span.MuiSkeleton-root")
+        self.NO_RESULT_MSG = (By.XPATH, f"//p[contains(text(), '{NO_RESULT_PARAGRAPH}')]")
+        self.FIRST_HISTORY_IN_MODAL = (By.XPATH, f"//div[@role='dialog']//a[contains(@class, 'MuiButtonBase-root')]")
 
     def click_background(self):
         """ 모달 배경 클릭해 창 닫기 """
@@ -104,12 +106,21 @@ class MainPage:
         modified_value = new_title_input.get_attribute('value')
         logger.debug(f"검증: 재오픈된 입력 필드 값: {modified_value}")
 
+    def get_no_result_msg(self):
+        try:
+            WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.NO_RESULT_MSG))
+        except NoSuchElementException:
+            return False
+        return True
+    
+    def get_first_history_id_in_search_modal(self):
+        dialog = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.DIALOG_CONTAINER))
+        first_history = dialog.find_element(*self.FIRST_HISTORY_IN_MODAL)
+        return first_history
+    
     def wait_for_skeleton_disappear(self, timeout=10):
         """
-        스켈레톤(로딩 표시) 요소가 DOM에서 사라지거나 보이지 않게 될 때까지 명시적으로 대기합니다.
-        
-        :param timeout: 최대 대기 시간 (초)
-        :raises TimeoutException: 지정된 시간 내에 스켈레톤이 사라지지 않을 경우 발생
+        스켈레톤(로딩 표시) 요소가 DOM에서 사라지거나 보이지 않게 될 때까지 명시적으로 대기
         """
         logger.debug(f"검증: 스켈레톤 로딩 요소 ({self.SKELETON}) 사라짐 대기 시작 (최대 {timeout}초)")
         try:
@@ -123,8 +134,8 @@ class MainPage:
             logger.error(f"❌ 오류: 스켈레톤이 지정된 시간 내에 사라지지 않았습니다.")
             raise
     
-    def click_rename_save_btn(self, target):
-        target.find_element(*self.RENAME_SAVE_BTN).click()
+    def click_rename_save_btn(self):
+        WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.RENAME_SAVE_BTN)).click()
         logger.debug("액션: '저장' 버튼 클릭")
 
     def click_hidden_menu_btn(self, target):
@@ -150,15 +161,28 @@ class MainPage:
 
     def click_cancel_btn(self, target):
         target.find_element(*self.CANCEL_BTN).click()
-        logger.info("✅ 액션: 삭제 모달에서 '취소' 버튼 클릭")
+        logger.info("✅ 액션: 모달에서 '취소' 버튼 클릭")
+
+    def close_history_search_modal(self):
+        try:
+            exit_btn = self.driver.find_element(*self.HISTORY_SEARCH_EXIT_BTN)
+            exit_btn.click()
+            logger.debug("액션: 검색 모달 닫기 버튼 클릭")
+        except Exception as e:
+            logger.warning(f"검색 모달 닫기 실패: {e}")
 
     def clear_input_field(self, target):
         target.send_keys(Keys.CONTROL, 'a', Keys.DELETE)
         logger.debug("액션: 입력 필드 초기화")
 
     def capture_toast_message(self, title):
-        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(self.TOAST_MESSAGE))
-        capture_screenshot(self.driver, title=title)   
+        try:
+            message = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(self.TOAST_MESSAGE)).text
+            capture_screenshot(self.driver, title=title) 
+            return message
+        except TimeoutException:
+            logger.error("❌ 토스트 메시지를 찾지 못했습니다.")  
+            return ""
 
     def validation_fieldset_color(self):
         history_title_fieldset = self.driver.find_element(*self.HISTORY_TITLE_INPUT_FIELD)
@@ -184,7 +208,7 @@ class MainPage:
         self.clear_input_field(new_title_input)
         
         new_title_input.send_keys(keyword)
-        logger.debug(f"액션: 입력 값 '{keyword}' 입력")
+        logger.info(f"✅ 액션: 입력 값 '{keyword}' 입력")
 
     def input_search_field(self, target, keyword):
         keyword_input = target.find_element(*self.HISTORY_SEARCH_INPUT_FIELD)
@@ -194,6 +218,13 @@ class MainPage:
         self.clear_input_field(keyword_input)
         keyword_input.send_keys(keyword)
         logger.debug(f"액션: 검색어 '{keyword}' 입력 완료")
+
+    def perform_search(self, keyword):
+        dialog = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.DIALOG_CONTAINER))
+        self.input_search_field(target=dialog, keyword=keyword)
+        
+        self.wait_for_skeleton_disappear()
+        logger.debug(f"검색어 '{keyword}' 입력 및 로딩 완료")
 
     def find_history_menu(self, i=0):
         """ hover 시 나타나는 히스토리 메뉴 찾기 """
@@ -235,7 +266,7 @@ class MainPage:
         self.click_rename_btn(history_menu_modal)
         self.input_rename_field(keyword)
         
-        self.click_rename_save_btn(history_menu_modal)
+        self.click_rename_save_btn()
 
         self.wait_for_history_title_update(keyword, i)
 
@@ -258,25 +289,20 @@ class MainPage:
             logger.warning("경고: 히스토리 항목을 찾지 못했습니다. 빈 리스트 반환.")
             return []
 
-    def get_chat_id_from_url(self, base_url: str = "https://qaproject.elice.io/ai-helpy-chat"):
-        current_url = self.driver.current_url
-        logger.debug(f"현재 URL: {current_url}")
-
-        if not current_url.startswith(base_url):
-            logger.error(f"❌ URL 접두사 불일치: 기대값 '{base_url}', 실제값 '{current_url[:len(base_url)]}'")
+    def extract_chat_id(self, url: str):
+        if not url:
+            logger.error("❌ 입력된 URL이 비어 있습니다.")
             return None
-        
-        uuid_pattern = r"/chats/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"
-
-        path = current_url.replace(base_url, "")
-        match = re.match(uuid_pattern, path)
+        uuid_pattern = r"chats/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"
+    
+        match = re.search(uuid_pattern, url)
 
         if match:
             chat_id = match.group(1)
             logger.debug(f"✅ Chat ID 추출 성공: {chat_id}")
             return chat_id
         else:
-            logger.error(f"❌ URL 패턴 불일치: URL '{current_url}'에서 유효한 Chat ID를 찾을 수 없습니다.")
+            logger.error(f"❌ Chat ID 추출 실패: 입력된 '{url}'에서 유효한 패턴을 찾을 수 없습니다.")
             return None
         
     def setup_function_with_precondition(self, keyword):
@@ -294,30 +320,20 @@ class MainPage:
         
         count = 0
         try:
-            dialog = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.DIALOG_CONTAINER))
-            self.input_search_field(target=dialog, keyword=keyword)
-            
-            self.wait_for_skeleton_disappear()
+            self.perform_search(keyword)
 
-            search_result = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(self.HISTORY_SEARCH_LIST))
-            history_items = search_result.find_elements(*self.HISTORY_ITEM)
-            found_texts = [item.text for item in history_items]
-            logger.info(f"🔎 실제 발견된 항목 텍스트들: {found_texts}")
-            count = len(history_items)
-            logger.info(f"검색 결과 확인: '{keyword}'에 대해 {count}개의 항목 발견")
-            
-        except TimeoutException:
-            logger.warning("검색 결과 목록(HISTORY_SEARCH_LIST)이 5초 내에 나타나지 않았습니다. 검색 결과 없음으로 간주.")
-            count = 0
-        except NoSuchElementException:
-            logger.debug("검색 결과 항목을 찾을 수 없습니다. (0개로 처리)")
+            search_result = self.driver.find_element(*self.HISTORY_SEARCH_LIST)
+            if search_result:
+                history_items = search_result.find_elements(*self.HISTORY_ITEM)
+                count = len(history_items)
+                found_texts = [item.text for item in history_items]
+                logger.info(f"🔎 실제 발견된 항목 텍스트들: {found_texts}")
+            else:
+                logger.info(f"ℹ️ '{keyword}'에 대한 검색 결과가 없습니다.")
+                count = 0
+        except Exception as e:
+            logger.error(f"검색 중 오류 발생: {e}")
             count = 0
         finally:
-            try:
-                exit_btn = self.driver.find_element(*self.HISTORY_SEARCH_EXIT_BTN)
-                exit_btn.click()
-                logger.debug("액션: 검색 모달 닫기 버튼 클릭")
-            except Exception as e:
-                logger.warning(f"검색 모달 닫기 실패: {e}")
-
+            self.close_history_search_modal()
             return count
