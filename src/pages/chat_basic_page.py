@@ -1,13 +1,13 @@
+import os
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-import time
-import os
 from datetime import datetime
 
-class chatBasicPage:
+class ChatBasicPage:
     TEXT_AREA = (By.CSS_SELECTOR, ".MuiInputBase-input.MuiInputBase-inputMultiline")
     SEND_BUTTON = (By.XPATH, "//button[@aria-label='보내기']")
     SEND_BUTTON_DISB = (By.CSS_SELECTOR, ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
@@ -16,6 +16,7 @@ class chatBasicPage:
     NEW_CONVERS = (By.CSS_SELECTOR, 'a[href="/ai-helpy-chat"]')
     EDIT_BUTTON = (By.XPATH, "//button[@aria-label='수정']")
     SCROLL_DOWN_BUTTON = (By.XPATH, "//button[@aria-label='맨 아래로 스크롤']")
+    PLUS_BUTTON = (By.CSS_SELECTOR, '[data-testid="plusIcon"]')
     
     SCREENSHOT_DIR = os.path.join(os.path.dirname(__file__), "screenshots")
     # LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
@@ -36,7 +37,7 @@ class chatBasicPage:
         time.sleep(3)
         
     ## 로딩 아이콘 대기
-    def wait_for_response(self):
+    def wait_for_loadinngIcon(self):
         self.wait.until(
             EC.presence_of_all_elements_located(self.LOADING_ICON)
         )
@@ -103,29 +104,36 @@ class chatBasicPage:
 
         # 화면에 보이도록 스크롤
         # self.driver.execute_script("arguments[0].scrollIntoView(true);", last_element)
-        # self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", last_element)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", last_element)
         # time.sleep(0.5)
         # scroll_container =self.wait.until(
         #     EC.presence_of_element_located(
-        #         (By.CSS_SELECTOR, "div.css-ovflmb.eglo0y10")
+        #         (By.CSS_SELECTOR, "div.css-ovflmb")
         #     )
         # )
         
         # self.driver.execute_script("arguments[0].scrollTop = 0;", scroll_container)
+        # self.driver.execute_script(
+        #     "arguments[0].scrollIntoView({ block: 'center' });", 
+        #     last_element
+        # )
         # 스크롤 이동
         time.sleep(2)
         self.scroll_up()
         
         # 마우스 이동 (hover)
         ActionChains(self.driver).move_to_element(last_element).perform()
-
+        time.sleep(1)
         # 편집 버튼 클릭
+        # edit_btn = self.wait.until(
+        #     EC.element_to_be_clickable(self.EDIT_BUTTON)
+        # )
         edit_btn = self.wait.until(
-            EC.element_to_be_clickable(self.EDIT_BUTTON)
+            EC.visibility_of_element_located(self.EDIT_BUTTON)
         )
         edit_btn.click()
         
-        time.sleep(5)
+        # time.sleep(5)
         text_areas = self.wait.until(
             EC.presence_of_all_elements_located(
                 (By.XPATH, ".//textarea[@name='input']")
@@ -171,7 +179,7 @@ class chatBasicPage:
     def scroll_up(self):
         scroll_container = self.wait.until(
             EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div.css-ovflmb.eglo0y10")
+                (By.CSS_SELECTOR, "div.css-ovflmb")
             )
         )
         
@@ -204,4 +212,12 @@ class chatBasicPage:
         self.screenshot("after")
         
         
+    ## 채팅창 배지 확인
+    def chat_badge_check(self):
+        plus_btn = self.wait.until(
+            EC.element_to_be_clickable(self.PLUS_BUTTON)
+        )
         
+        plus_btn.click()
+        
+        time.sleep(5)
