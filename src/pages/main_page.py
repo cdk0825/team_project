@@ -7,7 +7,7 @@ from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITL
 from selenium.webdriver.common.keys import Keys
 from src.utils import capture_screenshot
 import re
-from src.pages.chat_basic_page import chatBasicPage
+from src.pages.chat_basic_page import ChatBasicPage
 import logging
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
@@ -17,11 +17,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 class MainPage:
     def __init__(self, driver):
         self.driver = driver
         self.side_menu = SideMenu(driver)
-        self.chat_page = chatBasicPage(driver)
+        self.chat_page = ChatBasicPage(driver)
 
         # 요소 선택
         self.MODAL_BACKDROP = (By.CSS_SELECTOR, ".MuiBackdrop-root")
