@@ -48,27 +48,64 @@ def test_update_name(driver,data):
         assert element.is_displayed(), "Fail: notistack div가 보이지 않음"
 
 
-
-
 @pytest.mark.parametrize("data", update_data["email_tests"])
 def test_update_email(driver,data):
     page = UpdatePage(driver)
     login(driver, USERNAME5, PASSWORD5)
     page.go_to_setting()
-
     page.update_email(data['email'])
-
     if data['category']=='already':
-        page.send_code().click()
-        assert data["expected_msg"] in driver.page_source
-
-    ## 인증 횟수때메 일단 보류 
+        page.btn_send_code().click()
+        print(page.error_mag())
+        assert data["expected_msg"] == page.error_mag()
+    ##### 인증 횟수때메 일단 보류 
     elif data['category']=='wrong_code':
-        page.send_code().click()
-        driver.find_element(By.NAME, "code").send_keys('000000')
+        page.btn_send_code().click()
+        page.wait_and_send_input_code()
         page.ok_btn().click()
-        assert data["expected_msg"] in driver.page_source
-
+        print(page.error_mag())
+        assert data["expected_msg"] == page.error_mag()
     elif data['category']=='wrong_form':
         #page.ok_btn().click()
-        assert data["expected_msg"] in driver.page_source
+        print(page.error_mag())
+        assert data["expected_msg"] == page.error_mag()
+
+@pytest.mark.parametrize("data", update_data["phone_tests"])
+def test_update_phone(driver,data):
+    page = UpdatePage(driver)
+    login(driver, USERNAME5, PASSWORD5)
+    page.go_to_setting()
+    page.update_phone(data['num'])
+    
+    if data['category']=='short':
+        assert data["expected_msg"] == page.error_mag()
+    elif data['category']=='over':
+        value = page.phone_input().get_attribute("value")
+        print(value)
+        assert data["expected_result"] == value
+    elif data['category']=='none':
+        assert not page.btn_send_code_phone().is_enabled(), "Fail: 완료 버튼이 활성화 됨."
+        assert not page.ok_btn().is_enabled(), "Fail: 완료 버튼이 활성화 됨."
+
+@pytest.mark.parametrize("data", update_data["password_tests"])
+def test_update_password(driver,data):
+    wait = WebDriverWait(driver, 10)
+    page = UpdatePage(driver)
+    login(driver, USERNAME5, PASSWORD5)
+    page.go_to_setting()
+    page.update_password(data['pw'], data['new_pw'])
+    
+    if data['category']=='wrong_form':    
+        assert data["expected_msg"] == page.error_new_password()
+    elif data['category']=='already':
+        page.ok_btn().click()
+        assert data["expected_msg"] == page.error_now_password()
+    elif data['category']=='wrong_pw':
+        page.ok_btn().click()
+        assert data["expected_msg"] == page.error_now_password()
+    elif data['category']=='success':
+        page.ok_btn().click()
+        element = wait.until(
+        EC.visibility_of_element_located((By.ID, "notistack-snackbar")))
+        # page.update_env(data["new_pw"])
+        assert element.is_displayed(), "Fail: 변경완료 notistack div가 보이지 않음"

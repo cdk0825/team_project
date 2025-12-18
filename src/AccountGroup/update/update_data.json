@@ -17,5 +17,20 @@
     {"email":"tester.zu.digimon+f230@@gmail.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
     {"email":"tester.zu.digimon+f160@@gmail","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."},
     {"email":"!#$%^^&!+f8@$#!#$.com","category" : "wrong_form","expected_msg" : "이메일 주소가 올바르지 않습니다."}
+    ],
+    "phone_tests":[
+        {"num":"0", "category":"short","expected_msg":"잘못된 번호 형식입니다."},
+        {"num":"010123456", "category":"short","expected_msg":"잘못된 번호 형식입니다."},
+        {"num":"111111111111111111111", "category":"over", "expected_result":"111-1111-1111"},
+        {"num":"", "category":"none"}
+    ],
+    "password_tests":[
+        {"pw":"team01cheerup!", "new_pw":"RF1209","category":"wrong_form","expected_msg":"비밀번호를 더 강력하게 만들어주세요! 영문, 숫자, 특수문자를 포함해 8자 이상으로 조합해보세요."},
+        {"pw":"team01cheerup!", "new_pw":"RRRRRRRR","category":"wrong_form","expected_msg":"비밀번호를 더 강력하게 만들어주세요! 영문, 숫자, 특수문자를 포함해 8자 이상으로 조합해보세요."},
+        {"pw":"team01cheerup!", "new_pw":"11111111","category":"wrong_form","expected_msg":"비밀번호를 더 강력하게 만들어주세요! 영문, 숫자, 특수문자를 포함해 8자 이상으로 조합해보세요."},
+        {"pw":"team01cheerup!", "new_pw":"!@#$!@#$","category":"wrong_form","expected_msg":"비밀번호를 더 강력하게 만들어주세요! 영문, 숫자, 특수문자를 포함해 8자 이상으로 조합해보세요."},
+        {"pw":"team01cheerup!", "new_pw":"team01cheerup!","category":"already","expected_msg":"최근에 사용한 비밀번호입니다. 다른 비밀번호를 선택해주세요."},
+        {"pw":"qweasdzxc!1", "new_pw":"gogoF1team!","category":"wrong_pw","expected_msg":"비밀번호를 잘못 입력하셨습니다."},
+        {"pw":"team01cheerup!", "new_pw":"letsgoF1team!", "category":"success"}
     ]
   }
