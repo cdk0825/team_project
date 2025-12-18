@@ -1,8 +1,11 @@
 import pytest
+from src.utils.logger import get_logger 
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
 
+# 로깅 설정
+logger = get_logger(__file__)
 
 @pytest.mark.parametrize(
     "section_count, slide_count, should_create",
@@ -24,38 +27,38 @@ def test_section_slide_rules(driver, section_count, slide_count, should_create):
     - 섹션 수 = 슬라이드 수 : 정상 생성
     - 섹션 수 < 슬라이드 수 : 정상 생성
     """
-    print("\n [TEST START] Section / Slide Business Rules Validation")
+    logger.info("\n [TEST START] Section / Slide Business Rules Validation")
 
     login(driver, USERNAME1, PASSWORD1)
-    print("[STEP] 관리자 로그인 완료")
+    logger.info("[STEP] 관리자 로그인 완료")
 
     ppt_page = PPTCreatePage(driver)
 
     ppt_page.click_tool_tab()
-    print("[STEP] 도구 탭 클릭")
+    logger.info("[STEP] 도구 탭 클릭")
     ppt_page.click_ppt_tab()
-    print("[STEP] PPT 생성 탭 클릭")
+    logger.info("[STEP] PPT 생성 탭 클릭")
 
     ppt_page.clear_inputs()
-    print("[STEP] 입력값 초기화")
+    logger.info("[STEP] 입력값 초기화")
     
     ppt_page.enter_topic("이순신")
-    print("[STEP] 필수 입력값 주제 입력: 이순신")
+    logger.info("[STEP] 필수 입력값 주제 입력: 이순신")
 
     ppt_page.enter_section_input(section_count)
     ppt_page.enter_slide_input(slide_count)
-    print(f"[STEP] 섹션 수 입력: {section_count}, 슬라이드 수 입력: {slide_count}")
+    logger.info(f"[STEP] 섹션 수 입력: {section_count}, 슬라이드 수 입력: {slide_count}")
 
     if should_create:
-        print("[EXPECT] 생성 버튼이 활성화되어야 함")
-        print("[ASSERT] 생성 버튼 활성화 확인")
+        logger.info("[EXPECT] 생성 버튼이 활성화되어야 함")
+        logger.info("[ASSERT] 생성 버튼 활성화 확인")
         assert ppt_page.is_create_button_enabled() is True
-        print("[ASSERT PASS] 생성 버튼 활성화 상태")
+        logger.info("[ASSERT PASS] 생성 버튼 활성화 상태")
     else:
-        print("[EXPECT] 생성 버튼이 비활성화되어야 함")
+        logger.info("[EXPECT] 생성 버튼이 비활성화되어야 함")
         assert ppt_page.is_create_button_enabled() is False, \
             "섹션 수가 슬라이드 수보다 큰데 생성 버튼이 활성화됨"
-        print("[ASSERT PASS] 잘못된 조건에서 생성 버튼 비활성 확인")
+        logger.info("[ASSERT PASS] 잘못된 조건에서 생성 버튼 비활성 확인")
 
-    print("[TEST END] Section / Slide Business Rules Validation")
-    print("==============================\n")
+    logger.info("[TEST END] Section / Slide Business Rules Validation")
+    logger.info("==============================\n")

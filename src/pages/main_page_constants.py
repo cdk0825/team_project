@@ -16,3 +16,7 @@ SCROLL_PAUSE_TIME = 1.5
 
 # 히스토리 인덱스 속성
 INDEX_ATTRIBUTE = "data-item-index"
+
+FIELDSET_OUTLINE_COLOR = "rgb(198, 40, 40)"
+
+NO_RESULT_PARAGRAPH = "검색 결과가 없습니다."
