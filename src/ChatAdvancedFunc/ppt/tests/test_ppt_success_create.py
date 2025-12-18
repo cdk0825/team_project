@@ -1,17 +1,11 @@
 import pytest
-import logging
+from src.utils.logger import get_logger 
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils.file_utils import wait_for_download
 
-# 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
-
+logger = get_logger(__file__)
 
 def test_success_create(driver, download_dir):
     """

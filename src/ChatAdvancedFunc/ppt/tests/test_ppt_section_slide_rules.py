@@ -1,15 +1,11 @@
 import pytest
-import logging
+from src.utils.logger import get_logger 
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 @pytest.mark.parametrize(
     "section_count, slide_count, should_create",

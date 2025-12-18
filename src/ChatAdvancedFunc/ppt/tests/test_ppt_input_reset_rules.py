@@ -1,15 +1,11 @@
 import pytest
-import logging
+from src.utils.logger import get_logger 
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
 from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 
 # 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 @pytest.mark.xfail(reason="PPT 생성 화면 진입 시 입력값 자동 초기화 미구현")
 def test_input_reset_rules(driver):
