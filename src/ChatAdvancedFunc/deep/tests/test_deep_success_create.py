@@ -56,6 +56,15 @@ def test_success_create(driver):
     is_download_displayed = deep_page.is_download_button_displayed()
     print(f"[ASSERT] 다운받기 버튼 표시 여부: {is_download_displayed}")
     assert is_download_displayed is True, "다운받기 버튼이 표시되지 않음"
+    
+    deep_page.click_download_button()
+    print("[STEP] 다운받기 버튼 클릭")
+
+    assert deep_page.is_markdown_item_displayed() is True
+    print("[ASSERT PASS] 마크다운 다운로드 항목 노출")
+
+    assert deep_page.is_hwp_item_displayed() is True
+    print("[ASSERT PASS] HWP 파일 다운로드 항목 노출")
 
     print("[TEST END] DEEP Success Create")
     print("==============================\n")

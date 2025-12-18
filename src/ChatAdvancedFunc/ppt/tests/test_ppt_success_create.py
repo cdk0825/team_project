@@ -10,7 +10,7 @@ def test_success_create(driver, download_dir):
     PPT 정상 생성 테스트
     - 필수 입력값 입력
     - 심층조사모드 ON
-    - 생성 → 다시 생성
+    - 생성
     - 다운로드 버튼 노출 확인
     """
     

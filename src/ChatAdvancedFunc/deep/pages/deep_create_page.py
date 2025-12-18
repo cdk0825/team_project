@@ -64,9 +64,6 @@ class DEEPCreatePage:
 
     def enter_instruction(self, instruction):
         self.wait.until(EC.presence_of_element_located(self.INSTRUCTION_AREA)).send_keys(instruction)
-    
-    def is_create_button_enabled(self):
-        return self.driver.find_element(*self.CREATE_BTN).is_enabled()
 
     def click_create(self):
         self.wait.until(EC.element_to_be_clickable(self.CREATE_BTN)).click()
@@ -83,6 +80,21 @@ class DEEPCreatePage:
     def is_download_button_displayed(self):
         return self.wait.until(
             EC.visibility_of_element_located(self.DOWNLOAD_BTN)
+        ).is_displayed()
+    
+    def click_download_button(self):
+        self.wait.until(
+            EC.element_to_be_clickable(self.DOWNLOAD_BTN)
+        ).click()
+
+    def is_markdown_item_displayed(self):
+        return self.wait.until(
+            EC.visibility_of_element_located(self.MARKDOWN_ITEM)
+        ).is_displayed()
+
+    def is_hwp_item_displayed(self):
+        return self.wait.until(
+            EC.visibility_of_element_located(self.HWPFILE_ITEM)
         ).is_displayed()
     
     def blur_topic(self):
