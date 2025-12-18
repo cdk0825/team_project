@@ -1,6 +1,7 @@
 import os
 import time
 import logging
+from src.utils.logger import get_logger
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,25 +10,9 @@ from selenium.webdriver.common.keys import Keys
 from datetime import datetime
 
 # === logger 설정 시작 ===
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = get_logger(__file__)
+# === logger 설정 끝 ===
 
-if not logger.hasHandlers:
-    formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d] %(massage)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
-    
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
-    
-    file_handler = logging.FileHandler(
-        os.path.join(log_dir, "chat_basic_page.log"),
-        encoding="utf-8"
-    )
-    
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
 
 class ChatBasicPage:
     TEXT_AREA = (By.CSS_SELECTOR, ".MuiInputBase-input.MuiInputBase-inputMultiline")

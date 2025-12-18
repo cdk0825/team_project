@@ -1,30 +1,33 @@
 import os
 import logging
-
+from src.utils.logger import get_logger
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
 from src.config import USERNAME1, PASSWORD1
 
 # === logger 설정 시작 ===
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+# === logger 설정 시작 ===
+logger  = get_logger(__file__)
 
-if not logger.handlers:
-    formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d] %(massage)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.INFO)
+
+# if not logger.handlers:
+#     formatter = logging.Formatter(
+#         "[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
+#         datefmt="%Y-%m-%d %H:%M:%S"
+#     )
     
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
+#     log_dir = "logs"
+#     os.makedirs(log_dir, exist_ok=True)
     
-    file_handler = logging.FileHandler(
-        os.path.join(log_dir, "test_multi_model.log"),
-        encoding="utf-8"
-    )
+#     file_handler = logging.FileHandler(
+#         os.path.join(log_dir, "test_multi_model.log"),
+#         encoding="utf-8"
+#     )
     
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+#     file_handler.setFormatter(formatter)
+#     logger.addHandler(file_handler)
 # === logger 설정 끝 ===
 
 # === 환경 변수 설정 ===
