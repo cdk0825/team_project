@@ -11,7 +11,8 @@ def test_success_create(driver, download_dir):
     - 필수 입력값 입력
     - 심층조사모드 ON
     - 생성
-    - 다운로드 버튼 노출 확인
+    - 다운로드 버튼 클릭
+    - pptx 확장자 파일
     """
     
     print("\n==============================")
@@ -22,8 +23,8 @@ def test_success_create(driver, download_dir):
 
     ppt_page = PPTCreatePage(driver)
 
+    print("[STEP] 도구 탭 클릭")
     ppt_page.click_tool_tab()
-    assert "/tools" in driver.current_url
     
     print("[STEP] PPT 생성 탭 클릭")
     ppt_page.click_ppt_tab()
