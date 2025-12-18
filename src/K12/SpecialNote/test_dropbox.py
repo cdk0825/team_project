@@ -18,7 +18,9 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
-
+'''
+F1HEL-T146 : 세부 특기사항 드롭박스 확인 테스트
+'''
 
 # 드롭박스 리스트 확인하기
 def test_specialnote_dropbox(driver):

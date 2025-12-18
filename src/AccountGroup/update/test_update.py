@@ -8,21 +8,33 @@ import os
 import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from src.utils.logger import get_logger
 import time
 
-
-#로깅설정하기
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+# === logger 설정 시작 ===
+logger = get_logger(__file__)
+# === logger 설정 끝 ===
 
 base_dir = os.path.dirname(__file__)  # 현재 test_join.py 위치
 json_path = os.path.join(base_dir, "update_data.json")
 with open(json_path, "r", encoding="utf-8") as f:
     update_data = json.load(f)
 
+# 이름 변경 테스트
+'''
+[관련 TC]
+F1HEL-T79 : 이름 수정 성공
+F1HEL-T80 : 이메일 수정 실패 (틀린 인증 코드 입력)
+F1HEL-T81 : 휴대폰 번호 수정
+F1HEL-T82 : 비밀번호 수정
+F1HEL-T87 : 이메일 수정 실패 (이미 사용중인 메일 입력)
+F1HEL-T89 : 이메일 수정 실패 (형식에 맞지 않는 메일 입력)
+F1HEL-T93 : 이름 공백 수정 실패
+F1HEL-T94 : 휴대폰 번호 수정 실패 (형식에 맞지 않는 번호 입력)
+F1HEL-T99 : 비밀번호 수정 실패 (형식에 맞지 않는 비번 입력)
+F1HEL-T236 : 비밀번호 수정 실패 (기존 비밀번호로 수정 시도)
+F1HEL-T237 : 이름 수정 실패 (500자 이상)
+'''
 @pytest.mark.parametrize("data", update_data["name_tests"])
 def test_update_name(driver,data):
     wait = WebDriverWait(driver, 10)

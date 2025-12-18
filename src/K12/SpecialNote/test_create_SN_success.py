@@ -6,16 +6,19 @@ from src.config import USERNAME5, PASSWORD5
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
+from src.utils.logger import get_logger
 
 
-#로깅설정하기
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+# === logger 설정 시작 ===
+logger = get_logger(__file__)
+# === logger 설정 끝 ===
 
-# 세부특기 생성 성공
+
+# 세부 특기사항 생성 성공
+'''
+[관련TC]
+F1HEL-T145 : 세부 특기사항 생성 테스트
+'''
 def test_SN_succes(driver):
     page = SpecialNote(driver)
     login(driver, USERNAME5, PASSWORD5)
@@ -28,17 +31,7 @@ def test_SN_succes(driver):
     page.select_kuk()
     page.upload_exel_succes()
 
-    if "자동 생성" in driver.page_source:
-        btn_create = driver.find_element(By.XPATH,"//button[normalize-space(text())='자동 생성']")
-        btn_create.click()
-    elif "다시 생성" in driver.page_source:
-        btn_recreate = driver.find_element(By.XPATH,"//button[normalize-space(text())='다시 생성']")
-        btn_recreate.click()
-        modal = WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiDialog-root")))
-        button_in_modal = WebDriverWait(modal, 10).until(
-        EC.element_to_be_clickable((By.XPATH, ".//button[normalize-space(text())='다시 생성']")))
-        button_in_modal.click()
+    page.create_btn()
 
         
     assert page.result_download().is_enabled()

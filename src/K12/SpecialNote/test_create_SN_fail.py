@@ -17,6 +17,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+'''
+[관련 TC]
+F1HEL-T157 : 생성 실패 테스트 (파일 미첨부)
+F1HEL-T172 : 생성 실패 테스트 (파일 용량초과)
+F1HEL-T174 : 생성 실패 테스트 (미지원 파일 첨부)
+F1HEL-T177 : 생성 실패 테스트 (추가입력만 입력)
+F1HEL-T233 : 생성 중지 테스트
+'''
+
 # 세부특기 생성 실패 (파일 미첨부)
 def test_create_SN_fail_nofile(driver):
     page = SpecialNote(driver)
@@ -29,17 +38,7 @@ def test_create_SN_fail_nofile(driver):
     page.click_sub()
     page.select_kuk()
 
-    if "자동 생성" in driver.page_source:
-        btn_create = driver.find_element(By.XPATH,"//button[normalize-space(text())='자동 생성']")
-        btn_create.click()
-    elif "다시 생성" in driver.page_source:
-        btn_recreate = driver.find_element(By.XPATH,"//button[normalize-space(text())='다시 생성']")
-        btn_recreate.click()
-        modal = WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiDialog-root")))
-        button_in_modal = WebDriverWait(modal, 10).until(
-        EC.element_to_be_clickable((By.XPATH, ".//button[normalize-space(text())='다시 생성']")))
-        button_in_modal.click()
+    page.create_btn()
 
     assert not page.wait_success_message().is_displayed(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
 
@@ -79,17 +78,7 @@ def test_create_SN_fail_Stop(driver):
 
     page.upload_exel_succes()
     
-    if "자동 생성" in driver.page_source:
-        btn_create = driver.find_element(By.XPATH,"//button[normalize-space(text())='자동 생성']")
-        btn_create.click()
-    elif "다시 생성" in driver.page_source:
-        btn_recreate = driver.find_element(By.XPATH,"//button[normalize-space(text())='다시 생성']")
-        btn_recreate.click()
-        modal = WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiDialog-root")))
-        button_in_modal = WebDriverWait(modal, 10).until(
-        EC.element_to_be_clickable((By.XPATH, ".//button[normalize-space(text())='다시 생성']")))
-        button_in_modal.click()
+    page.create_btn()
 
     page.click_stop_icon()
     stop_message = page.get_stop_message_text()

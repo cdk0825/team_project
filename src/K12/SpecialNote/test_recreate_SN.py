@@ -14,6 +14,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+'''
+[관련 TC]
+F1HEL-T228 : 다시 생성 테스트 (다른 입력값)
+'''
+
 # 세부특기 생성 성공
 def test_SN_succes(driver):
     page = SpecialNote(driver)
