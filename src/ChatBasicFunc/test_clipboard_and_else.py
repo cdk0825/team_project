@@ -1,6 +1,5 @@
 import os
 import time
-import logging
 from src.utils.logger import get_logger
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
@@ -9,7 +8,6 @@ from src.config import USERNAME1, PASSWORD1
 # === logger 설정 시작 ===
 logger  = get_logger(__file__)
 # === logger 설정 끝 ===
-
 
 # === 환경 변수 설정 ===
 BASE_URL = os.environ.get("BASE_URL", "https://qaproject.elice.io")

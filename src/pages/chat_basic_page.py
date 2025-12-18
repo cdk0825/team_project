@@ -1,6 +1,5 @@
 import os
 import time
-import logging
 from src.utils.logger import get_logger
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -12,7 +11,6 @@ from datetime import datetime
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
 # === logger 설정 끝 ===
-
 
 class ChatBasicPage:
     TEXT_AREA = (By.CSS_SELECTOR, ".MuiInputBase-input.MuiInputBase-inputMultiline")
@@ -35,7 +33,6 @@ class ChatBasicPage:
     FILE_INPUT = (By.CSS_SELECTOR, "input[type='file']")
     
     SCREENSHOT_DIR = os.path.join(os.path.dirname(__file__), "screenshots")
-    # LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
     
     def __init__(self, driver, timeout=200):
         self.driver = driver
