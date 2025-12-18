@@ -1,8 +1,5 @@
 import os
-import time
-import pytest
 import logging
-from datetime import datetime
 
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
@@ -14,12 +11,9 @@ logger.setLevel(logging.INFO)
 
 if not logger.handlers:
     formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] %(message)s",
+        "[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d] %(massage)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
-    
-    # console_handler = logging.StreamHandler()
-    # console_handler.setFormatter(formatter)
     
     log_dir = "logs"
     os.makedirs(log_dir, exist_ok=True)
@@ -30,8 +24,6 @@ if not logger.handlers:
     )
     
     file_handler.setFormatter(formatter)
-    
-    # logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 # === logger 설정 끝 ===
 
