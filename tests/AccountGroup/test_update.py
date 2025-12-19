@@ -2,7 +2,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import logging
 from src.pages.update_page import UpdatePage
 from src.utils import login
-from src.config import USERNAME5, PASSWORD5
+from f1_helpychat.data.config import USERNAME5, PASSWORD5
 import pytest
 import os
 import json

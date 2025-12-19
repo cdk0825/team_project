@@ -3,7 +3,7 @@ from src.pages.side_menu_page import SideMenu
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
-from src.pages.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, FIELDSET_OUTLINE_COLOR, NO_RESULT_PARAGRAPH)
+from data.main_page_constants import (HISTORY_DELETE_BUTTON_PARAGRAPH, TITLE_RENAME_BUTTON_PARAGRAPH, RENAME_MODAL_TITLE, RENAME_CANCEL_BTN_PARAGRAPH, RENAME_SAVE_BTN_PARAGRAPH, DELETE_MODAL_TITLE, DELETE_CONFIRM_BTN_PARAGRAPH, FIELDSET_OUTLINE_COLOR, NO_RESULT_PARAGRAPH)
 from selenium.webdriver.common.keys import Keys
 from src.utils import capture_screenshot
 import re

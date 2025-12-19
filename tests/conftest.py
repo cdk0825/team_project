@@ -6,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import pytest
 from src.pages.main_page import MainPage
 from src.utils import login
-from src.config import USERNAME, PASSWORD
+from data.config import USERNAME, PASSWORD
 import os
 
 # 테스트용 다운로드 디렉토리

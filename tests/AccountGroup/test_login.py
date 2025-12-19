@@ -1,23 +1,22 @@
 # loginlogout/login.py
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
 from src.utils import login
 from src.pages.joinlogin_page import JoinLoginPage
-from src.config import USERNAME, PASSWORD 
+from data.config import USERNAME, PASSWORD 
 import os
 import json
 import pytest
-import logging
 import time
 from src.utils.logger import get_logger
+from pathlib import Path
+
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
 # === logger 설정 끝 ===
 
 base_dir = os.path.dirname(__file__)  # 현재 test_join.py 위치
-json_path = os.path.join(base_dir, "../data/login_data.json")
+json_path = Path(__file__).resolve().parents[2] / "data" / "login_data.json"
+
 with open(json_path, "r", encoding="utf-8") as f:
     login_data_list = json.load(f)
 

@@ -2,7 +2,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 from src.pages.k2_page import K12Note
 from src.utils import login
-from src.config import USERNAME5, PASSWORD5
+from f1_helpychat.data.config import USERNAME5, PASSWORD5
 from selenium.webdriver.common.by import By
 from src.utils.logger import get_logger
 

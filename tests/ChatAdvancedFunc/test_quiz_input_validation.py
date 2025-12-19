@@ -1,7 +1,7 @@
 import pytest
 from src.utils.logger import get_logger 
 from src.utils import login
-from src.config import USERNAME4, PASSWORD4
+from f1_helpychat.data.config import USERNAME4, PASSWORD4
 from f1_helpychat.src.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from src.pages.agent_page_constants import AGENT_SEARCH_BUTTON_PARAGRAPH, NO_RESULT_FOUND_PARAGRAPH
-from src.resources.testdata.test_data import NEW_AGENT_NAME, NEW_AGENT_RULE, NEW_AGENT_START_CONV
+from f1_helpychat.data.chat_history_data import NEW_AGENT_NAME, NEW_AGENT_RULE, NEW_AGENT_START_CONV
 import logging
 from src.utils import capture_screenshot
 

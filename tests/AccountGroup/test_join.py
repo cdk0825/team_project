@@ -4,6 +4,7 @@ import os
 from src.utils.logger import get_logger
 from src.utils import go_to_join
 from src.pages.joinlogin_page import JoinLoginPage
+from pathlib import Path
 
 
 # === logger 설정 시작 ===
@@ -12,7 +13,7 @@ logger = get_logger(__file__)
 
 # json 파일 테스트 데이터로 활용
 base_dir = os.path.dirname(__file__)  # 현재 test_join.py 위치
-json_path = os.path.join(base_dir,"join_data.json")
+json_path = Path(__file__).resolve().parents[2] / "data" / "login_data.json"
 with open(json_path, "r", encoding="utf-8") as f:
     join_data_list = json.load(f)
 
