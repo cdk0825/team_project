@@ -1,15 +1,13 @@
 from selenium.webdriver.support import expected_conditions as EC
-import logging
 from src.pages.update_page import UpdatePage
 from src.utils import login
-from f1_helpychat.data.config import USERNAME5, PASSWORD5
+from data.config import USERNAME5, PASSWORD5
 import pytest
 import os
 import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from src.utils.logger import get_logger
-import time
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)

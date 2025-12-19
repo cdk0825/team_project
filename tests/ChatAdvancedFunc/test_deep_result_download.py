@@ -2,8 +2,8 @@ import os
 import pytest
 from src.utils import login
 from src.utils.logger import get_logger 
-from f1_helpychat.data.config import USERNAME1, PASSWORD1
-from f1_helpychat.src.pages.deep_create_page import DEEPCreatePage
+from data.config import USERNAME1, PASSWORD1
+from src.pages.deep_create_page import DEEPCreatePage
 from src.utils.file_utils import wait_for_download
 from selenium.webdriver.support import expected_conditions as EC
 

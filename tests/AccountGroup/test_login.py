@@ -1,7 +1,5 @@
 # loginlogout/login.py
-from src.utils import login
 from src.pages.joinlogin_page import JoinLoginPage
-from data.config import USERNAME, PASSWORD 
 import os
 import json
 import pytest

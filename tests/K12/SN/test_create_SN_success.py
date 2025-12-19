@@ -1,7 +1,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 from src.pages.k2_page import K12Note
 from src.utils import login
-from f1_helpychat.data.config import USERNAME5, PASSWORD5
+from data.config import USERNAME5, PASSWORD5
 from src.utils.logger import get_logger
 
 # === logger 설정 시작 ===

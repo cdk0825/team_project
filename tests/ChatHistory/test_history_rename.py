@@ -1,6 +1,6 @@
 import pytest
 import logging
-from f1_helpychat.data.chat_history_data import MODIFY_TITLE_NAME, MAX_LENGTH_TITLE, MAX_LENGTH_OVER_TITLE
+from data.chat_history_data import MODIFY_TITLE_NAME, MAX_LENGTH_TITLE, MAX_LENGTH_OVER_TITLE
 
 logging.basicConfig(
     level=logging.INFO,

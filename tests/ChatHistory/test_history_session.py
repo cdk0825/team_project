@@ -1,4 +1,4 @@
-from f1_helpychat.data.chat_history_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, NEW_SESSION_CHAT_KEYWORD, PAST_SESSION_CHAT_KEYWORD)
+from data.chat_history_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, NEW_SESSION_CHAT_KEYWORD, PAST_SESSION_CHAT_KEYWORD)
 import logging
 import pytest
 

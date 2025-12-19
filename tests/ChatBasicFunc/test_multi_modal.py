@@ -2,7 +2,7 @@ import os
 from src.utils.logger import get_logger
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
-from f1_helpychat.data.config import USERNAME1, PASSWORD1
+from data.config import USERNAME1, PASSWORD1
 
 # === logger 설정 시작 ===
 logger  = get_logger(__file__)

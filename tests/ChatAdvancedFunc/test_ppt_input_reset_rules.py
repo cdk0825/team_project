@@ -1,8 +1,8 @@
 import pytest
 from src.utils.logger import get_logger 
 from src.utils import login
-from f1_helpychat.data.config import USERNAME1, PASSWORD1
-from f1_helpychat.src.pages.ppt_create_page import PPTCreatePage
+from data.config import USERNAME1, PASSWORD1
+from src.pages.ppt_create_page import PPTCreatePage
 
 # 로깅 설정
 logger = get_logger(__file__)

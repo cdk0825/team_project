@@ -1,7 +1,7 @@
 
 from src.pages.k2_page import K12Note
 from src.utils import login
-from f1_helpychat.data.config import USERNAME5, PASSWORD5
+from data.config import USERNAME5, PASSWORD5
 from selenium.webdriver.common.by import By
 import pytest
 from src.utils.logger import get_logger

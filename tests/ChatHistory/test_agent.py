@@ -1,5 +1,5 @@
 from src.pages.agent_page import AgentPage
-from f1_helpychat.data.chat_history_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD, QA_AGENT_TITLE
+from data.chat_history_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD, QA_AGENT_TITLE
 import pytest
 import logging
 

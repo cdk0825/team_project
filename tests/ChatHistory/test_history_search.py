@@ -1,4 +1,4 @@
-from f1_helpychat.data.chat_history_data import NEW_KEYWORD, MODIFY_TITLE_NAME, SPECIAL_CHAR_SAMPLES, NONE_TEXT
+from data.chat_history_data import NEW_KEYWORD, MODIFY_TITLE_NAME, SPECIAL_CHAR_SAMPLES, NONE_TEXT
 import logging
 import pytest
 
