@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-
+from selenium.common.exceptions import TimeoutException
 
 class PPTCreatePage:
     def __init__(self, driver):
@@ -124,8 +124,8 @@ class PPTCreatePage:
             return self.wait.until(
                 EC.visibility_of_element_located(self.STOP_MESSAGE)
             ).text
-        except:
-            return None
+        except TimeoutException:
+            raise
 
     def enter_section_input(self, value):
         self.wait.until(EC.presence_of_element_located(self.SECTION_INPUT)).send_keys(value)
@@ -156,13 +156,13 @@ class PPTCreatePage:
     def get_topic_error_text(self):
         try:
             return self.driver.find_element(*self.TOPIC_ERROR_TEXT).text
-        except:
+        except TimeoutException:
             return None
     
     def get_instruction_error_text(self):
         try:
             return self.driver.find_element(*self.INSTRUCTION_ERROR_TEXT).text
-        except:
+        except TimeoutException:
             return None
 
         
