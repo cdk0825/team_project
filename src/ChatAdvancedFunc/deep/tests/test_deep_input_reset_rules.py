@@ -2,7 +2,7 @@ import pytest
 from src.utils.logger import get_logger 
 from src.utils import login
 from src.config import USERNAME1, PASSWORD1
-from src.ChatAdvancedFunc.deep.pages.deep_create_page import DEEPCreatePage
+from f1_helpychat.src.pages.deep_create_page import DEEPCreatePage
 
 logger = get_logger(__file__)
 
