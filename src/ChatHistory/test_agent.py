@@ -88,9 +88,7 @@ def test_make_session_using_agent(logged_in_driver):
     agent.input_search_keyword("QA")
 
     agent.wait_for_skeleton_disappear()
-
-    agent.click_agent_button()
-
+    agent.click_agent_btn()
     agent.wait_for_skeleton_disappear()
 
     agent_title = agent.get_agent_title()
@@ -98,3 +96,36 @@ def test_make_session_using_agent(logged_in_driver):
     logger.info(f"✅ 검증 성공: {agent_title}로 새로운 세션이 생성되었습니다.")
 
     logger.info("--- 🔚 [F1HEL-T105] TC 종료 ---")
+
+def test_create_agent(logged_in_driver):
+    logger.info("--- 에이전트 생성 ---")
+    driver = logged_in_driver
+    agent = AgentPage(driver)
+    agent.side_menu.click_agent_search_btn()
+
+    agent.create_agent()
+
+    message = agent.capture_notistack('create_agent')
+    logger.info(f"✅ 스낵바 알림 확인: {message}")
+    logger.info("--- 에이전트 생성 종료 ---")
+
+
+def test_delete_agent(logged_in_driver):
+    logger.info("--- 🆕 [F1HEL-T106] TC 실행: 에이전트 삭제 ---")
+    driver = logged_in_driver
+    agent = AgentPage(driver)
+    agent.side_menu.click_agent_search_btn()
+
+    agent.create_agent()
+    agent.click_go_back_btn()
+
+    target_agent = agent.get_delete_target_agent()
+    agent.scroll_to_bottom()
+
+    agent.click_menu_icon(target=target_agent)
+    agent.click_delete_menu_btn()
+    agent.click_delete_confirm_btn()
+
+    message = agent.capture_notistack('delete_agent')
+    logger.info(f"✅ 스낵바 알림 확인: {message}")
+    logger.info("--- 🔚 [F1HEL-T106] TC 종료 ---")
