@@ -8,13 +8,14 @@ import json
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from src.utils.logger import get_logger
+from pathlib import Path
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
 # === logger 설정 끝 ===
 
 base_dir = os.path.dirname(__file__)  # 현재 test_join.py 위치
-json_path = os.path.join(base_dir, "update_data.json")
+json_path = Path(__file__).resolve().parents[2] / "data" / "update_data.json"
 with open(json_path, "r", encoding="utf-8") as f:
     update_data = json.load(f)
 
