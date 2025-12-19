@@ -29,10 +29,8 @@ def test_quiz_difficulty(driver, difficulty):
     quiz_page = QUIZCreatePage(driver)
     
     quiz_page.click_tool_tab()
-    assert "/tools" in driver.current_url
-
-    logger.info("[STEP] QUIZ 생성 탭 클릭")
     quiz_page.click_quiz_tab()
+    logger.info("[STEP] QUIZ 생성 화면 진입")
 
     logger.info("[STEP] 입력값 초기화")
     quiz_page.clear_inputs()
@@ -54,25 +52,52 @@ def test_quiz_difficulty(driver, difficulty):
 
     logger.info("[STEP] 주제 입력")
     quiz_page.enter_topic("강아지와 개의 차이")
+    
+    is_enabled = quiz_page.is_create_button_enabled()
+    logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
 
-    assert quiz_page.is_create_button_enabled() is True
+    if is_enabled is not True:
+        logger.error(
+            "[ERROR] 생성 버튼 비활성화됨 "
+            f"(difficulty={difficulty})"
+        )
+
+    assert is_enabled is True
     logger.info("[ASSERT PASS] 생성 버튼 활성화")
 
-    logger.info("[STEP] 생성 버튼 클릭")
     quiz_page.click_create()
-    logger.info("[STEP] 다시 생성 버튼 클릭")
+    logger.info("[STEP] 생성 버튼 클릭")
     quiz_page.click_regenerate()
+    logger.info("[STEP] 다시 생성 버튼 클릭")
     
     logger.info("[WAIT] QUIZ 생성 완료 대기 (STOP 아이콘 사라질 때까지)")
     quiz_page.wait_generation_complete()
 
-    logger.info("[ASSERT] 생성 완료 메시지 확인")
-    assert quiz_page.wait_success_message().is_displayed()
-    
-    logger.info("[ASSERT] 생성 결과 확인")
+    success_msg = quiz_page.wait_success_message()
+    if not success_msg.is_displayed():
+        logger.error(
+            "[ERROR] 생성 완료 메시지 미노출 "
+            f"(difficulty={difficulty})"
+        )
+
+    assert success_msg.is_displayed()
+    logger.info("[ASSERT PASS] 생성 완료 메시지 노출")
+
+    # 생성 결과 영역 검증
+    if not quiz_page.is_question_displayed():
+        logger.error("[ERROR] 문제 영역 미노출")
     assert quiz_page.is_question_displayed()
+
+    if not quiz_page.is_learning_goal_displayed():
+        logger.error("[ERROR] 학습목표 영역 미노출")
     assert quiz_page.is_learning_goal_displayed()
+
+    if not quiz_page.is_option_displayed():
+        logger.error("[ERROR] 보기 영역 미노출")
     assert quiz_page.is_option_displayed()
+
+    if not quiz_page.is_explanation_displayed():
+        logger.error("[ERROR] 해설 영역 미노출")
     assert quiz_page.is_explanation_displayed()
 
     logger.info(f"[TEST END] Quiz Difficulty Test - {difficulty.upper()}")

@@ -29,9 +29,8 @@ def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty
     quiz_page = QUIZCreatePage(driver)
 
     quiz_page.click_tool_tab()
-    logger.info("[STEP] 도구 탭 클릭")
     quiz_page.click_quiz_tab()
-    logger.info("[STEP] 퀴즈 생성 탭 클릭")
+    logger.info("[STEP] 퀴즈 생성 화면 진입")
 
     quiz_page.clear_inputs()
     logger.info("[STEP] 입력값 초기화 완료")
@@ -59,13 +58,27 @@ def test_option_difficulty_input_validation(driver, skip_option, skip_difficulty
 
     is_enabled = quiz_page.is_create_button_enabled()
     logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
-    assert is_enabled is False, "생성 버튼이 활성화 되어 있음! 필수 입력값 검증 실패"
+    
+    logger.info("[ASSERT] 필수 입력값 누락 시 생성 버튼 비활성화 확인")
+    if is_enabled:
+        logger.error(
+            "[ASSERT FAIL] 필수 입력값 누락 상태에서 생성 버튼이 활성화됨 "
+            f"(skip_option={skip_option}, skip_difficulty={skip_difficulty}, skip_topic={skip_topic})"
+        )
+    assert is_enabled is False
+    logger.info("[ASSERT PASS] 생성 버튼 비활성화 정상")
     
     if expect_topic_error:
         topic_error_text = quiz_page.get_topic_error_text()
         logger.info(f"[RESULT] 주제 에러 메시지: {topic_error_text}")
-        assert topic_error_text == "1자 이상 입력해주세요.", \
-            "주제 미입력 시 에러 메시지가 표시되지 않음"
+        
+        logger.info("[ASSERT] 주제 미입력 에러 메시지 확인")
+        if topic_error_text != "1자 이상 입력해주세요.":
+            logger.error(
+                f"[ASSERT FAIL] 주제 에러 메시지 불일치: {topic_error_text}"
+            )
+        assert topic_error_text == "1자 이상 입력해주세요."
+        logger.info("[ASSERT PASS] 주제 에러 메시지 정상 노출")
 
     logger.info("[ASSERT PASS] 필수 입력값 유효성 검증 성공")
     logger.info("[TEST END] Quiz Input Validation")
