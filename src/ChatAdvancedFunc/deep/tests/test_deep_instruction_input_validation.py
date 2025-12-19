@@ -30,39 +30,55 @@ def test_deep_instruction_input_validation(
 
     logger.info("\n==============================")
     logger.info("[TEST START] DEEP Instruction Input Validation")
+    
+    try:
+        login(driver, USERNAME4, PASSWORD4)
+        logger.info("[STEP] 로그인 완료")
 
-    login(driver, USERNAME4, PASSWORD4)
-    logger.info("[STEP] 로그인 완료")
+        deep_page = DEEPCreatePage(driver)
 
-    deep_page = DEEPCreatePage(driver)
+        deep_page.click_tool_tab()
+        deep_page.click_deep_tab()
+        logger.info("[STEP] 심층 조사 화면 진입")
 
-    deep_page.click_tool_tab()
-    logger.info("[STEP] 도구 탭 클릭")
+        deep_page.clear_inputs()
+        logger.info("[STEP] 입력값 초기화")
 
-    deep_page.click_deep_tab()
-    logger.info("[STEP] 심층 조사 탭 클릭")
+        # 필수 입력값: 주제
+        deep_page.enter_topic("AI 모델 성능 비교")
+        deep_page.blur_topic()
+        logger.info("[STEP] 주제 입력 완료")
 
-    deep_page.clear_inputs()
-    logger.info("[STEP] 입력값 초기화")
+        deep_page.enter_instruction(instruction_input)
+        deep_page.blur_instruction()
+        logger.info(f"[STEP] 지시사항 입력값 길이: {len(instruction_input)}")
 
-    # 필수 입력값: 주제
-    deep_page.enter_topic("AI 모델 성능 비교")
-    deep_page.blur_topic()
-    logger.info("[STEP] 주제 입력 완료")
+        is_enabled = deep_page.is_create_button_enabled()
+        logger.info(f"[RESULT] 생성 버튼 활성화 여부: {is_enabled}")
+        
+        if is_enabled is not expect_enabled:
+            logger.error(
+                f"[ASSERT FAIL] 생성 버튼 상태 불일치 "
+                f"(expect={expect_enabled}, actual={is_enabled})"
+            )
+        assert is_enabled is expect_enabled
 
-    deep_page.enter_instruction(instruction_input)
-    deep_page.blur_instruction()
-    logger.info(f"[STEP] 지시사항 입력값 길이: {len(instruction_input)}")
+        if expect_error:
+            error_text = deep_page.get_instruction_error_text()
+            logger.info(f"[RESULT] 지시사항 에러 메시지: {error_text}")
+            
+            if error_text != "2000자 이하로 입력해주세요.":
+                logger.error(
+                    "[ASSERT FAIL] 지시사항 길이 초과 에러 메시지 불일치"
+                )
+            assert error_text == "2000자 이하로 입력해주세요."
+            
+        logger.info("[ASSERT PASS] 지시사항 입력값 검증 완료")
 
-    is_enabled = deep_page.is_create_button_enabled()
-    logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
-    assert is_enabled is expect_enabled, "생성 버튼 활성화 상태가 기대값과 다름"
-
-    if expect_error:
-        error_text = deep_page.get_instruction_error_text()
-        logger.info(f"[RESULT] 지시사항 에러 메시지: {error_text}")
-        assert error_text == "2000자 이하로 입력해주세요.", \
-            "지시사항 길이 초과 시 에러 메시지가 표시되지 않음"
-
-    logger.info("[TEST END] DEEP Instruction Input Validation")
-    logger.info("==============================\n")
+    except Exception:
+        logger.exception("[TEST ERROR] 테스트 중 예외 발생")
+        raise
+    
+    finally:
+        logger.info("[TEST END] DEEP Instruction Input Validation")
+        logger.info("==============================\n")

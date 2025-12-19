@@ -10,7 +10,7 @@ logger = get_logger(__file__)
 @pytest.mark.parametrize(
     "topic_input, expect_error",
     [
-        ("", False),         # 미입력
+        ("", True),         # 미입력
         ("a" * 501, True),      # 500자 초과
     ]
 )
@@ -24,35 +24,46 @@ def test_deep_topic_input_validation(driver, topic_input, expect_error):
     logger.info("\n==============================")
     logger.info("[TEST START] DEEP Topic Input Validation")
 
-    login(driver, USERNAME4, PASSWORD4)
-    logger.info("[STEP] 로그인 완료")
+    try:
+        login(driver, USERNAME4, PASSWORD4)
+        logger.info("[STEP] 로그인 완료")
 
-    deep_page = DEEPCreatePage(driver)
+        deep_page = DEEPCreatePage(driver)
 
-    deep_page.click_tool_tab()
-    logger.info("[STEP] 도구 탭 클릭")
+        deep_page.click_tool_tab()
+        deep_page.click_deep_tab()
+        logger.info("[STEP] 심층 조사 화면 진입")
 
-    deep_page.click_deep_tab()
-    logger.info("[STEP] 심층 조사 탭 클릭")
+        deep_page.clear_inputs()
+        logger.info("[STEP] 입력값 초기화")
 
-    deep_page.clear_inputs()
-    logger.info("[STEP] 입력값 초기화")
+        if topic_input:
+            deep_page.enter_topic(topic_input)
+        logger.info(f"[STEP] 주제 입력값 길이: {len(topic_input)}")
+        
+        deep_page.blur_topic()
 
-    if topic_input:
-        deep_page.enter_topic(topic_input)
-    logger.info(f"[STEP] 주제 입력값 길이: {len(topic_input)}")
-    
-    deep_page.blur_topic()
+        is_enabled = deep_page.is_create_button_enabled()
+        logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
+        
+        if is_enabled:
+            logger.error("[ASSERT FAIL] 주제 입력 검증 실패 - 생성 버튼이 활성화됨")
+        assert is_enabled is False, "생성 버튼이 활성화됨 (입력값 검증 실패)"
+        
+        if expect_error:
+            error_text = deep_page.get_topic_error_text()
+            logger.info(f"[RESULT] 주제 에러 메시지: {error_text}")
+            
+            if error_text != "1자 이상 500자 이하로 입력해주세요.":
+                logger.error("[ASSERT FAIL] 주제 에러 메시지 불일치")
+            
+            assert error_text == "1자 이상 500자 이하로 입력해주세요.", \
+                "주제 길이 초과 시 에러 메시지가 표시되지 않음"
 
-    is_enabled = deep_page.is_create_button_enabled()
-    logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
-    assert is_enabled is False, "생성 버튼이 활성화됨 (입력값 검증 실패)"
-    
-    if expect_error:
-        error_text = deep_page.get_topic_error_text()
-        logger.info(f"[RESULT] 주제 에러 메시지: {error_text}")
-        assert error_text == "1자 이상 500자 이하로 입력해주세요.", \
-            "주제 길이 초과 시 에러 메시지가 표시되지 않음"
+    except Exception:
+      logger.exception("[TEST ERROR] 테스트 중 예외 발생")
+      raise
 
-    logger.info("[TEST END] DEEP Topic Input Validation")
-    logger.info("==============================\n")
+    finally:
+        logger.info("[TEST END] DEEP Topic Input Validation")
+        logger.info("==============================\n")
