@@ -1,7 +1,7 @@
 from src.resources.testdata.test_data import NEW_KEYWORD, MODIFY_TITLE_NAME, SPECIAL_CHAR_SAMPLES, NONE_TEXT
 import logging
 import pytest
-import time
+
 # 로거 설정
 logging.basicConfig(
     level=logging.INFO,
@@ -139,3 +139,23 @@ def test_select_history_in_search_list(logged_in_main_page_setup):
     logger.info(f"before: {selected_chat_id}, after: {first_history_chat_id}")    
     
     logger.info("--- 🔚 [F1HEL-T108] TC 종료 ---")
+
+def test_get_modal_histories(logged_in_main_page_setup):
+    logger.info("--- 🆕 [F1HEL-T37] TC 실행: 모달 창에서 히스토리 목록 조회 ---")
+    main = logged_in_main_page_setup
+
+    all_history_titles = main.get_all_history_texts()[:20]
+
+    main.side_menu.click_search_history_btn()
+    main.wait_for_skeleton_disappear()
+
+    all_history_titles_in_modal = main.get_all_history_texts_in_searched_list()
+    min_length = min(len(all_history_titles), len(all_history_titles_in_modal))
+    for i in range(min_length):
+        try:
+            assert all_history_titles[i] == all_history_titles_in_modal[i]
+            logger.info(f"✅ {i}번째 타이틀: {all_history_titles[i]}")
+        except AssertionError:
+            logger.error(f"❌ 불일치 [{i+1}]: \n 메인: '{all_history_titles[i]}' \n 모달: '{all_history_titles_in_modal[i]}'")
+            raise 
+    logger.info("--- 🔚 [F1HEL-T37] TC 종료 ---")

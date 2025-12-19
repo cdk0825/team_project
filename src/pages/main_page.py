@@ -61,6 +61,7 @@ class MainPage:
         self.HISTORY_SEARCH_EXIT_BTN = (By.XPATH, "//*[@data-icon='xmark']/parent::button")
         self.HISTORY_SEARCH_LIST = (By.XPATH, "//div[@role='dialog']//ul[contains(@class, 'MuiList-root')]")
         self.HISTORY_ITEM = (By.XPATH, "//div[@role='dialog']//li[contains(@class, 'MuiListItem-root')]")
+        self.HISTORY_ITEM_TEXT = (By.XPATH, "//div[@role='dialog']//span[contains(@class, 'MuiListItemText-primary')]")
         self.SKELETON = (By.CSS_SELECTOR, "span.MuiSkeleton-root")
         self.NO_RESULT_MSG = (By.XPATH, f"//p[contains(text(), '{NO_RESULT_PARAGRAPH}')]")
         self.FIRST_HISTORY_IN_MODAL = (By.XPATH, f"//div[@role='dialog']//a[contains(@class, 'MuiButtonBase-root')]")
@@ -288,6 +289,23 @@ class MainPage:
         except NoSuchElementException:
             logger.warning("경고: 히스토리 항목을 찾지 못했습니다. 빈 리스트 반환.")
             return []
+
+    def get_all_history_texts_in_searched_list(self):
+        try:
+            history_elements = self.driver.find_elements(*self.HISTORY_ITEM_TEXT)
+
+            texts = []
+            for element in history_elements:
+                texts.append(element.text)
+            return texts
+        except TimeoutException:
+            logger.warning("경고: 히스토리 목록 섹션을 찾지 못했습니다. 빈 리스트 반환.")
+            return []
+        except NoSuchElementException:
+            logger.warning("경고: 히스토리 항목을 찾지 못했습니다. 빈 리스트 반환.")
+            return []
+
+
 
     def extract_chat_id(self, url: str):
         if not url:
