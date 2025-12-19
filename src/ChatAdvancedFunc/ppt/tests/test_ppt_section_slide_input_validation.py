@@ -23,30 +23,50 @@ def test_section_slide_input_validation(driver, testdata, expected):
     logger.info("==============================\n")
     logger.info("\n [TEST START] Section / Slide Input Validation")
     
-    login(driver, USERNAME1, PASSWORD1)
-    logger.info("[STEP] 관리자 로그인 완료")
-    
-    ppt_page = PPTCreatePage(driver)
+    try:
+        login(driver, USERNAME1, PASSWORD1)
+        logger.info("[STEP] 관리자 로그인 완료")
+        
+        ppt_page = PPTCreatePage(driver)
 
-    ppt_page.click_tool_tab()
-    logger.info("[STEP] 도구 탭 클릭")
-    ppt_page.click_ppt_tab()
-    logger.info("[STEP] PPT 생성 탭 클릭")
+        ppt_page.click_tool_tab()
+        ppt_page.click_ppt_tab()
+        logger.info("[STEP] PPT 생성 화면 진입")
 
-    ppt_page.clear_inputs()
-    logger.info("[STEP] 입력값 초기화")
+        ppt_page.clear_inputs()
+        logger.info("[STEP] 입력값 초기화")
 
-    ppt_page.enter_section_input(testdata)
-    ppt_page.enter_slide_input(testdata)
-    logger.info("[STEP] 입력값 입력 완료")
+        ppt_page.enter_section_input(testdata)
+        ppt_page.enter_slide_input(testdata)
+        logger.info("[STEP] 입력값 입력 완료")
 
-    section_value = ppt_page.get_section_value()
-    slide_value = ppt_page.get_slide_value()
-    logger.info(f"[RESULT] section_value: '{section_value}', slide_value: '{slide_value}'")
+        section_value = ppt_page.get_section_value()
+        slide_value = ppt_page.get_slide_value()
+        logger.info(f"[RESULT] section_value: '{section_value}', slide_value: '{slide_value}'")
 
-    assert section_value == expected, f"섹션 입력폼에 잘못된 값이 들어감: {section_value}"
-    assert slide_value == expected, f"슬라이드 입력폼에 잘못된 값이 들어감: {slide_value}"
+        # 섹션 입력 검증
+        if section_value != expected:
+            logger.error(
+                f"[ERROR] 섹션 입력값 불일치 - input='{testdata}', "
+                f"expected='{expected}', actual='{section_value}'"
+            )
+        assert section_value == expected, \
+            f"섹션 입력폼에 잘못된 값이 들어감: {section_value}"
 
-    logger.info("[ASSERT PASS] 섹션 / 슬라이드 입력값 검증 성공")
-    logger.info("[TEST END] Section / Slide Input Validation")
-    logger.info("==============================\n")
+        # 슬라이드 입력 검증
+        if slide_value != expected:
+            logger.error(
+                f"[ERROR] 슬라이드 입력값 불일치 - input='{testdata}', "
+                f"expected='{expected}', actual='{slide_value}'"
+            )
+        assert slide_value == expected, \
+            f"슬라이드 입력폼에 잘못된 값이 들어감: {slide_value}"
+            
+    except Exception as e:
+      logger.exception("[TEST ERROR] 예외 발생")
+      raise
+
+    finally:    
+        logger.info("[ASSERT PASS] 섹션 / 슬라이드 입력값 검증 성공")
+        logger.info("[TEST END] Section / Slide Input Validation")
+        logger.info("==============================\n")

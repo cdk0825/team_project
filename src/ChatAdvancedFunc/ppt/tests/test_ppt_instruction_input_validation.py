@@ -23,44 +23,59 @@ def test_instruction_input_validation(driver, instruction, expect_error, expect_
     logger.info("\n==============================")
     logger.info("[TEST START] Instruction Input Validation")
 
-    login(driver, USERNAME1, PASSWORD1)
-    logger.info("[STEP] 관리자 로그인 완료")
+    try:    
+        login(driver, USERNAME1, PASSWORD1)
+        logger.info("[STEP] 관리자 로그인 완료")
 
-    ppt_page = PPTCreatePage(driver)
+        ppt_page = PPTCreatePage(driver)
 
-    ppt_page.click_tool_tab()
-    logger.info("[STEP] 도구 탭 클릭")
+        ppt_page.click_tool_tab()
+        ppt_page.click_ppt_tab()
+        logger.info("[STEP] PPT 생성 화면 진입")
 
-    ppt_page.click_ppt_tab()
-    logger.info("[STEP] PPT 생성 탭 클릭")
+        ppt_page.clear_inputs()
+        logger.info("[STEP] 입력값 초기화")
+        
+        ppt_page.enter_topic("지시사항 테스트용 주제")
+        ppt_page.enter_instruction(instruction)
+        logger.info("[STEP] 주제/지시사항 입력 완료")
+        error_text = ppt_page.get_instruction_error_text()
+        
+        logger.info(f"[RESULT] error_text: {error_text}")
+        
+        is_enabled = ppt_page.is_create_button_enabled()
+        logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
 
-    ppt_page.clear_inputs()
-    logger.info("[STEP] 입력값 초기화")
-    
-    ppt_page.enter_topic("지시사항 테스트용 주제")
+        # 에러 메시지 검증
+        if expect_error:
+            if error_text != "2000자 이하로 입력해주세요.":
+                logger.error(
+                    f"[ERROR] 지시사항 에러 메시지 불일치 - actual: {error_text}"
+                )
+            assert error_text == "2000자 이하로 입력해주세요.", \
+                "2000자 초과 시 에러 메시지가 표시되지 않음"
+            logger.info("[ASSERT PASS] 오류 메시지 정상 노출")
 
-    ppt_page.enter_instruction(instruction)
-    logger.info("[STEP] 지시사항 입력 완료")
+        else:
+            if error_text is not None:
+                logger.error(
+                    f"[ERROR] 지시사항 에러 메시지가 노출됨 - actual: {error_text}"
+                )
+            assert error_text is None, \
+                "정상 입력/미입력 시 에러 메시지가 노출됨"
+            logger.info("[ASSERT PASS] 오류 메시지 미노출 정상")
 
-    error_text = ppt_page.get_instruction_error_text()
-    logger.info(f"[RESULT] error_text: {error_text}")
-    
-    is_enabled = ppt_page.is_create_button_enabled()
-    logger.info(f"[RESULT] 생성 버튼 활성화 상태: {is_enabled}")
+        # 버튼 활성화 상태 검증
+        if is_enabled is not expect_enabled:
+            logger.error(
+                f"[ERROR] 생성 버튼 상태 불일치 - "
+                f"expect={expect_enabled}, actual={is_enabled}"
+            )
 
-    if expect_error:
-        assert error_text == "2000자 이하로 입력해주세요.", (
-            f"[ASSERT FAIL] Expected error but got: {error_text}"
-        )
-        logger.info("[ASSERT PASS] 오류 메시지 정상 노출")
-    else:
-        assert error_text is None, (
-            f"[ASSERT FAIL] Expected no error but got: {error_text}"
-        )
-        logger.info("[ASSERT PASS] 오류 메시지 미노출 정상")
-    assert is_enabled is expect_enabled, (
-        f"버튼 상태 불일치: expect={expect_enabled}, actual={is_enabled}"
-    )
+    except Exception as e:
+      logger.exception("[TEST ERROR] 예외 발생")
+      raise
 
-    logger.info("[TEST END] Instruction Input Validation")
-    logger.info("==============================\n")
+    finally:
+        logger.info("[TEST END] Instruction Input Validation")
+        logger.info("==============================\n")
