@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.deep.pages.deep_create_page import DEEPCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T126") 
 def test_success_create(driver):
     """
     DEEP 정상 생성 테스트

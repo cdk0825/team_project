@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.deep.pages.deep_create_page import DEEPCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T127", "F1HEL_T128") 
 @pytest.mark.parametrize(
     "topic_input, expect_error",
     [

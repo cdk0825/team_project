@@ -7,6 +7,7 @@ from src.utils.file_utils import wait_for_download
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T100")
 def test_success_create(driver, download_dir):
     """
     PPT 정상 생성 테스트

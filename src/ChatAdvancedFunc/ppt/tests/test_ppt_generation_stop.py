@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T143")
 def test_ppt_generation_stop(driver):
     """
     PPT 생성 중지 기능 테스트

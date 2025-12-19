@@ -7,6 +7,7 @@ from src.config import USERNAME1, PASSWORD1
 # 로깅 설정
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T40")
 @pytest.mark.parametrize("testdata, expected", [
     ("강아지", ""),   # 한글 문자 입력 -> 비어야 함
     ("abc", ""),      # 영어 문자 입력 -> 비어야 함

@@ -7,6 +7,7 @@ from src.config import USERNAME1, PASSWORD1
 # 로깅 설정
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T41", "F1HEL_T76")
 @pytest.mark.parametrize("topic, expect_error, expect_enabled", [
     ("", True, False),              # 미입력
     ("A", False, True),             # 최소값

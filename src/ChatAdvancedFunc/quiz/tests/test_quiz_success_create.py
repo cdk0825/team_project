@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T103")
 def test_success_create(driver):
     """
     QUIZ 정상 생성 테스트

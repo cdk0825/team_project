@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.deep.pages.deep_create_page import DEEPCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T162") 
 @pytest.mark.xfail(reason="심층조사 생성 화면 진입 시 입력값 자동 초기화 미구현")
 def test_deep_input_reset_rules(driver):
     """

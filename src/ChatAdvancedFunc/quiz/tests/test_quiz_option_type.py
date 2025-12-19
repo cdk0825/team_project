@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T115")
 @pytest.mark.parametrize("option_type", ["single", "multi", "subjective"])
 def test_quiz_option_type_result(driver, option_type):
     """

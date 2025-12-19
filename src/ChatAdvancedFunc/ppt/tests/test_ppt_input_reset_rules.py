@@ -7,6 +7,7 @@ from src.ChatAdvancedFunc.ppt.pages.ppt_create_page import PPTCreatePage
 # 로깅 설정
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T160")
 @pytest.mark.xfail(reason="PPT 생성 화면 진입 시 입력값 자동 초기화 미구현")
 def test_input_reset_rules(driver):
     """

@@ -7,6 +7,7 @@ from src.config import USERNAME1, PASSWORD1
 # 로깅 설정
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T41", "F1HEL_T158")
 @pytest.mark.parametrize("instruction, expect_error, expect_enabled", [
     ("", False, True),                 # 미입력 → 버튼 활성
     ("간단한 지시사항", False, True),   # 정상 입력 → 버튼 활성

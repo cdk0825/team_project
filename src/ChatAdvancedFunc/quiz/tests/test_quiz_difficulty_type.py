@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T114")
 @pytest.mark.parametrize("difficulty", [
     "high",    # 상
     "middle",  # 중

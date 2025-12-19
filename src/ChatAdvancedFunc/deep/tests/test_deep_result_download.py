@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T130") 
 @pytest.mark.parametrize(
     "download_type, expected_ext",
     [

@@ -6,6 +6,8 @@ from src.ChatAdvancedFunc.deep.pages.deep_create_page import DEEPCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T141") 
+
 def test_deep_generation_stop(driver):
     """
     심층 조사 중지 기능 테스트

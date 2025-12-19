@@ -7,6 +7,7 @@ from src.config import USERNAME1, PASSWORD1
 # 로깅 설정
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T84", "F1HEL_T85", "F1HEL_T86")
 @pytest.mark.parametrize(
     "section_count, slide_count, should_create",
     [

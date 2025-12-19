@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T161")
 @pytest.mark.xfail(reason="QUIZ 생성 화면 진입 시 입력값 자동 초기화 미구현")
 def test_input_reset_rules(driver):
     """

@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T144")
 def test_quiz_generation_stop(driver):
     """
     QUIZ 생성 중지 기능 테스트

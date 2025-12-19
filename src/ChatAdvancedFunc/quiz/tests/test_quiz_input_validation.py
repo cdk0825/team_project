@@ -6,6 +6,7 @@ from src.ChatAdvancedFunc.quiz.pages.quiz_create_page import QUIZCreatePage
 
 logger = get_logger(__file__)
 
+@pytest.mark.tc("F1HEL_T109")
 @pytest.mark.parametrize("skip_option, skip_difficulty, skip_topic, expect_topic_error", [
     (True, False, False, False),    # 유형 미선택
     (False, True, False, False),    # 난이도 미선택
