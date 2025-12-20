@@ -154,15 +154,15 @@ class PPTCreatePage:
             self.wait.until(lambda d: toggle_input.is_selected())
     
     def get_topic_error_text(self):
-        try:
-            return self.driver.find_element(*self.TOPIC_ERROR_TEXT).text
-        except TimeoutException:
-            return None
+        elements = self.driver.find_elements(*self.TOPIC_ERROR_TEXT)
+        if elements:
+            return elements[0].text
+        return None
     
     def get_instruction_error_text(self):
-        try:
-            return self.driver.find_element(*self.INSTRUCTION_ERROR_TEXT).text
-        except TimeoutException:
-            return None
+        elements = self.driver.find_elements(*self.INSTRUCTION_ERROR_TEXT)
+        if elements:
+            return elements[0].text
+        return None
 
         
