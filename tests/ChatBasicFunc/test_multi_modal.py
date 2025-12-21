@@ -3,6 +3,7 @@ from src.utils.logger import get_logger
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
 from data.config import USERNAME1, PASSWORD1
+from data.chat_basic_data import TEXT11, TEXT12
 
 # === logger 설정 시작 ===
 logger  = get_logger(__file__)
@@ -12,8 +13,7 @@ logger  = get_logger(__file__)
 BASE_URL = os.environ.get("BASE_URL", "https://qaproject.elice.io")
 WAIT_TIMEOUT = 200
 
-TEXT1 = "호랑이 배경으로 1월 달력 만들어줘"
-TEXT2 = "실사 하늘 사진 만들어줘"
+
 FILE1 = os.path.abspath("C:/Users/cdk08/OneDrive/Desktop/1차프로젝트/TC-cross-check-F1.xlsx")
 
 
@@ -35,13 +35,13 @@ def test_multi_modal(driver):
     
     logger.info(" [SETUP] ⚙️ 액션: 3. 채팅창 배지선택 후 텍스트 넣어 보내기 시작")
     chat_basic_page.chat_badge_check("A")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT1)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT11)             ## 텍스트 입려 후 보내기
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
     logger.info("✅ 검증 성공: 3. 채팅창 배지선택 후 텍스트 넣어 보내기 완료")
     
     logger.info(" [SETUP] ⚙️ 액션: 4. 이미지 생성 후 취소, 재생성 시작")
     chat_basic_page.chat_badge_check("A")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT2)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT12)             ## 텍스트 입려 후 보내기
     chat_basic_page.chat_stop()                     ## 생성 취소
     chat_basic_page.recreate()                      ## 재생성
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
@@ -54,7 +54,7 @@ def test_multi_modal(driver):
     
     logger.info(" [SETUP] ⚙️ 액션: 6. 검색어 입력 후 웹 검색 시작")
     chat_basic_page.chat_badge_check("B")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT2)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT12)             ## 텍스트 입려 후 보내기
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
     logger.info("✅ 검증 성공: 6. 검색어 입력 후 웹 검색 완료")
     
