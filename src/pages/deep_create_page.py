@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 
 
 class DEEPCreatePage:
@@ -112,7 +113,7 @@ class DEEPCreatePage:
             return self.wait.until(
                 EC.visibility_of_element_located(self.TOPIC_ERROR_TEXT)
             ).text
-        except:
+        except TimeoutException:
             return None
     
     def get_instruction_error_text(self):
@@ -120,7 +121,7 @@ class DEEPCreatePage:
             return self.wait.until(
                 EC.visibility_of_element_located(self.INSTRUCTION_ERROR_TEXT)
             ).text
-        except:
+        except TimeoutException:
             return None
     
     def click_stop_icon(self):
@@ -131,8 +132,8 @@ class DEEPCreatePage:
             return self.wait.until(
                 EC.visibility_of_element_located(self.STOP_MESSAGE)
             ).text
-        except:
-            return None
+        except TimeoutException:
+            raise
     
     def get_topic_value(self):
         return self.driver.find_element(*self.TOPIC_INPUT).get_attribute("value")

@@ -76,8 +76,6 @@ class ChatBasicPage:
         self.driver.find_element(*self.SEND_BUTTON).click()
         logger.info("✔️ [END] 보내기 버튼 클릭 완료")
         
-        time.sleep(3)
-        
     ## 로딩 아이콘 대기
     def wait_for_loadinngIcon(self):
         logger.info("✔️ [START] 로딩 아이콘 상태")
@@ -90,7 +88,6 @@ class ChatBasicPage:
     def new_conversation(self):
         logger.info("✔️ [START] 새로운 대화창")
         self.driver.find_element(By.CSS_SELECTOR, 'a[href="/ai-helpy-chat"]').click()
-        time.sleep(3)
         logger.info("✔️ [END] 새로운 대화창 클릭 완료")
         
     ## 질문 다시 생성
@@ -167,7 +164,6 @@ class ChatBasicPage:
             )
             
             # 스크롤 이동
-            time.sleep(2)
             logger.info("✔️ 화면 스크롤 업 수행")
             self.scroll_up()
             
@@ -296,7 +292,6 @@ class ChatBasicPage:
         )
         plus_btn.click()
         logger.info("✔️ 플러스 버튼 클릭")
-        time.sleep(2)
         
         if str == "A":
             logger.info("✔️ 이미지 배지 선택")
@@ -304,7 +299,6 @@ class ChatBasicPage:
                 EC.element_to_be_clickable(self.IMAGE_CLICK)
             )
             image_btn.click()
-            time.sleep(2)
             
         elif str == "B":
             logger.info("✔️ 웹 배지 선택")
@@ -312,7 +306,6 @@ class ChatBasicPage:
                 EC.element_to_be_clickable(self.WEB_CLICK)
             )
             image_btn.click()
-            time.sleep(2)
             
         elif str == "C":
             logger.info("✔️ 파일 업로드 배지 선택")
@@ -320,7 +313,6 @@ class ChatBasicPage:
                 EC.element_to_be_clickable(self.FILE_UPLOAD)
             )
             image_btn.click()
-            time.sleep(10)
         
         else:
             logger.warning(f"!!! 알수없는 배지 타입: {str}")
@@ -335,7 +327,6 @@ class ChatBasicPage:
         )
         cancle_btn.click()
         logger.info("✔️ cancel 버튼 클릭")
-        time.sleep(2)
         
         assert self.wait.until(
             EC.invisibility_of_element_located(self.CANCEL_ICON)
@@ -345,7 +336,6 @@ class ChatBasicPage:
     ## 전송 취소
     def chat_stop(self):
         logger.info("✔️ [START] 전송 중단 시도")
-        time.sleep(2)
         stop_btn = self.wait.until(
             EC.element_to_be_clickable(self.STOP_BUTTON)
         )
@@ -360,5 +350,4 @@ class ChatBasicPage:
         file_input.send_keys(path)
         
         logger.info("✔️ 파일 경로 입력 완료")
-        time.sleep(10)
         logger.info("✔️ [END] 파일 업로드 완료 (대기 종료)")

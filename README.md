@@ -67,6 +67,27 @@
 
 ---
 
+## 🗂️ 폴더 구조
+
+```
+.
+└── f1_helpychat                    # root 폴더
+    ├── data                        # test data, 상수 모음
+    ├── reports                     # 테스트 실행 후 생성된 보고서 및 로그 저장 디렉토리
+    │   ├── logs
+    │   └── screenshots
+    ├── src                         # 자동화 프레임워크의 소스 코드
+    │   ├── pages                   # Page Object 클래스 (UI 요소 및 메서드 정의)
+    │   └── utils                   # 공통 유틸리티 함수 및 헬퍼 모듈
+    └── tests                       # 테스트 스크립트
+        ├── AccountGroup
+        ├── ChatAdvancedFunc
+        ├── ChatBasicFunc
+        ├── ChatHistory
+        └── K12
+```
+---
+
 ## 👥 팀 소개
 
 엘리스 QA 트랙 3기 1팀 F1입니다.

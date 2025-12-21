@@ -3,7 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
-
+from selenium.common.exceptions import TimeoutException
 
 class QUIZCreatePage:
     def __init__(self, driver):
@@ -112,7 +112,7 @@ class QUIZCreatePage:
     def get_topic_error_text(self):
         try:
             return self.wait.until(EC.visibility_of_element_located(self.TOPIC_ERROR_TEXT)).text
-        except:
+        except TimeoutException:
             return None
 
     def is_create_button_enabled(self):
@@ -133,8 +133,8 @@ class QUIZCreatePage:
     def get_stop_message_text(self):
         try:
             return self.wait.until(EC.visibility_of_element_located(self.STOP_MESSAGE)).text
-        except:
-            return None
+        except TimeoutException:
+            raise
     
     def wait_success_message(self):
         return self.wait.until(EC.visibility_of_element_located(self.SUCCESS_MESSAGE))
