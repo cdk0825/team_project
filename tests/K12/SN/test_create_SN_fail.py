@@ -113,20 +113,19 @@ def test_create_SN_fail_onlyAddInput(driver):
 
 
 # 대용량 파일이 안 만들어져서 보류
+# 영상 파일을 xls 변환 실패
 # 세부특기 생성 실패 (대용량 파일 파일 첨부)
-def test_create_SN_fail_overfile(driver):
-    page = K12Note(driver)
-    login(driver, USERNAME5, PASSWORD5)
-    page.click_tool_tab()
-    page.click_SN_tab()
-    page.click_sch_lv()
-    page.select_cho()
-    page.wait.until(EC.invisibility_of_element_located(page.LISTBOX))
-    page.click_sub()
-    page.select_kuk()
-
-    page.upload_largefile_succes()
-    time.sleep(3)
+# def test_create_SN_fail_overfile(driver):
+#     page = K12Note(driver)
+#     login(driver, USERNAME5, PASSWORD5)
+#     page.click_tool_tab()
+#     page.click_SN_tab()
+#     page.click_sch_lv()
+#     page.select_cho()
+#     page.wait.until(EC.invisibility_of_element_located(page.LISTBOX))
+#     page.click_sub()
+#     page.select_kuk()
+#     page.upload_largefile_succes()
 
     # try:
     #     files = driver.find_elements(By.XPATH, "//input[@type='file']")

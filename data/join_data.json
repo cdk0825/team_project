@@ -4,7 +4,8 @@
     "password": "F1Race1208!",
     "name": "박지우",
     "expected_result" : "success",
-    "expected_msg" : ""
+    "expected_msg" : "",
+    "expected_msg_aft_wd" : "Email or password does not match"
   },
     {
     "loginId": "tester.zu.digimon+f100",

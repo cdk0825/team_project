@@ -36,85 +36,127 @@ F1HEL-T237 : 이름 수정 실패 (500자 이상)
 '''
 @pytest.mark.parametrize("data", update_data["name_tests"])
 def test_update_name(driver,data):
+    logger.info("===이름 변경 테스트 시작===")
     wait = WebDriverWait(driver, 10)
     page = UpdatePage(driver)
     login(driver, USERNAME5, PASSWORD5)
+    logger.info("로그인 완료")
     page.go_to_setting()
+    logger.info("정보 수정 페이지 활성화")
 
     update_name = page.update_name(data['name'])
+    logger.info("이름 변경 중")
 
     if data['category']=='success':
         page.ok_btn().click()
         wait.until(EC.text_to_be_present_in_element(
         (By.XPATH, "//h6[contains(@class,'MuiTypography-subtitle2')]"),data['name']))
+        logger.info("이름 변경 완료")
         assert update_name == data['name']
 
     elif data['category']=='none':
+        logger.info("공백 이름 변경")
         assert not page.ok_btn().is_enabled(), "Fail: 완료 버튼이 활성화 됨."
 
     elif data['category']=='over':
         page.ok_btn().click()
         element = wait.until(
         EC.visibility_of_element_located((By.ID, "notistack-snackbar")))
+        logger.info("500자 이상 이름 변경")
         assert element.is_displayed(), "Fail: notistack div가 보이지 않음"
 
 
 @pytest.mark.parametrize("data", update_data["email_tests"])
 def test_update_email(driver,data):
+    logger.info("===이메일 변경 테스트 시작===")
     page = UpdatePage(driver)
     login(driver, USERNAME5, PASSWORD5)
+    logger.info("로그인 완료")
     page.go_to_setting()
+    logger.info("정보 수정 페이지 활성화")
+
     page.update_email(data['email'])
+    logger.info("이메일 변경 중")
+
     if data['category']=='already':
+        logger.info("이미 있는 메일로 변경 테스트")
         page.btn_send_code().click()
-        print(page.error_mag())
+        logger.info(page.error_mag())
         assert data["expected_msg"] == page.error_mag()
+
     ##### 인증 횟수때메 일단 보류 
     elif data['category']=='wrong_code':
         page.btn_send_code().click()
         page.wait_and_send_input_code()
         page.ok_btn().click()
-        print(page.error_mag())
+        logger.info(page.error_mag())
         assert data["expected_msg"] == page.error_mag()
+
     elif data['category']=='wrong_form':
+        logger.info("잘못된 형식 이메일 테스트")
         #page.ok_btn().click()
-        print(page.error_mag())
+        logger.info(page.error_mag())
         assert data["expected_msg"] == page.error_mag()
+
 
 @pytest.mark.parametrize("data", update_data["phone_tests"])
 def test_update_phone(driver,data):
+    logger.info("===핸드폰 변경 테스트 시작===")
     page = UpdatePage(driver)
     login(driver, USERNAME5, PASSWORD5)
+    logger.info("로그인 완료")
+
     page.go_to_setting()
+    logger.info("정보 수정 페이지 활성화")
+
     page.update_phone(data['num'])
-    
+    logger.info("휴대폰 변경 중")
+
     if data['category']=='short':
+        logger.info("휴대폰 번호 자릿수가 짧은 경우")
         assert data["expected_msg"] == page.error_mag()
+
     elif data['category']=='over':
+        logger.info("휴대폰 번호 자릿수가 긴 경우 (8자 초과)")
         value = page.phone_input().get_attribute("value")
-        print(value)
+        logger.info(value)
         assert data["expected_result"] == value
+
     elif data['category']=='none':
+        logger.info("휴대폰 번호 공백인 경우")
         assert not page.btn_send_code_phone().is_enabled(), "Fail: 완료 버튼이 활성화 됨."
         assert not page.ok_btn().is_enabled(), "Fail: 완료 버튼이 활성화 됨."
 
 @pytest.mark.parametrize("data", update_data["password_tests"])
 def test_update_password(driver,data):
+    logger.info("===비밀번호 변경 테스트===")
     wait = WebDriverWait(driver, 10)
     page = UpdatePage(driver)
     login(driver, USERNAME5, PASSWORD5)
+    logger.info("로그인 완료")
+
     page.go_to_setting()
+    logger.info("정보 수정 페이지 활성화")
+
     page.update_password(data['pw'], data['new_pw'])
+    logger.info("비밀 번호 변경 중")
     
     if data['category']=='wrong_form':    
+        logger.info("잘못된 형식의 비밀번호")
         assert data["expected_msg"] == page.error_new_password()
+
     elif data['category']=='already':
+        logger.info("이미 사용 중인 비밀번호")
         page.ok_btn().click()
         assert data["expected_msg"] == page.error_now_password()
+
     elif data['category']=='wrong_pw':
+        logger.info("현재 비밀번호를 잘못 입력한 경우")
         page.ok_btn().click()
         assert data["expected_msg"] == page.error_now_password()
+
     elif data['category']=='success':
+        logger.info("형식에 맞는 비밀번호")
         page.ok_btn().click()
         element = wait.until(
         EC.visibility_of_element_located((By.ID, "notistack-snackbar")))

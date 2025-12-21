@@ -244,18 +244,6 @@ class K12Note:
 
             raise Exception("자동 생성/다시 생성 버튼을 찾지 못했습니다.")
 
-        # if "자동 생성" in self.driver.page_source:
-        #     btn_create = self.driver.find_element(By.XPATH,"//button[normalize-space(text())='자동 생성']")
-        #     btn_create.click()
-        # elif "다시 생성" in self.driver.page_source:
-        #     btn_recreate = self.driver.find_element(By.XPATH,"//button[normalize-space(text())='다시 생성']")
-        #     btn_recreate.click()
-        #     modal = WebDriverWait(self.driver, 10).until(
-        #             EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiDialog-root")))
-        #     button_in_modal = WebDriverWait(modal, 10).until(
-        #     EC.element_to_be_clickable((By.XPATH, ".//button[normalize-space(text())='다시 생성']")))
-        #     button_in_modal.click()
-
     def get_create_btn(self):
         return WebDriverWait(self.driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//button[normalize-space(text())='자동 생성']"))

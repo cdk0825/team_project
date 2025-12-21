@@ -78,7 +78,6 @@ def test_onlyAddInput(driver):
 
     page.send_add_input()
     logger.info("추가 입력란 작성")
-    time.sleep(3)
     
     btn_create = driver.find_element(By.XPATH,"//button[normalize-space(text())='자동 생성']")
 
@@ -121,7 +120,7 @@ def test_no_achieve(driver):
         ele.send_keys(Keys.CONTROL, "a")  # 전체 선택
         ele.send_keys(Keys.DELETE)        # 삭제
     else:
-        print("성취기준 입력된게 없습니다.")
+        logger.info("성취기준 입력된게 없습니다.")
     logger.info("성취기준 필드 값 삭제")
 
     page.create_btn()

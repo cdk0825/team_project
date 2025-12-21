@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-class JoinLoginPage:
+class AccountPage:
     def __init__(self, driver):
         self.driver = driver
 
@@ -54,3 +54,8 @@ class JoinLoginPage:
 
     def login_btn_click(self):
         self.driver.find_element(By.XPATH, "//button[normalize-space(text())='Login']").click()
+
+    def withdraw_click(self, login_id):
+        self.driver.find_element(By.XPATH, "//button[contains(text(), '탈퇴하기')]").click()
+        self.driver.find_element(By.XPATH, "//input[@name='email']").send_keys("Delete ",login_id)
+        self.driver.find_element(By.XPATH, "//button[contains(text(), '탈퇴하기')]").click()

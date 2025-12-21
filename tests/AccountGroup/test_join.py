@@ -3,7 +3,7 @@ import json
 import os
 from src.utils.logger import get_logger
 from src.utils import go_to_join
-from src.pages.joinlogin_page import JoinLoginPage
+from src.pages.account_page import AccountPage
 from pathlib import Path
 
 
@@ -30,11 +30,10 @@ F1HEL_T119 : 회원가입 실패(500자 이상 이름 입력)
 @pytest.mark.parametrize("data", join_data_list)
 #해당 테스트 함수에 다양한 입력값 제공하여 여러번 실행될 수 있도록함.
 def test_join_cases(driver,data):
-    page = JoinLoginPage(driver)
+    page = AccountPage(driver)
     logger.info(f"테스트 시작: {data['loginId']}")
 
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
-
 
     page.get_create_btn().click() # 첫번째 create account 클릭
     page.click_create_account_with_email() # 두번째 create accocut with email 클릭
@@ -109,12 +108,13 @@ F1HEL_T239 : 선택약관만 동의 후 회원가입 테스트
 @pytest.mark.parametrize("agree_type", ["none","optional","required"])
 def test_join_agree(driver, agree_type):
     go_to_join(driver)
-    page = JoinLoginPage(driver)
+    page = AccountPage(driver)
+    user = join_data_list[0]
     
     # 약관 위주 테스트로 테스트 계정 하드코딩 처리
-    page.set_login_id("tester.zu.digimon+f100@gmail.com")
-    page.set_password("team01cheerup!")
-    page.set_name("박동의")
+    page.set_login_id(user["loginId"])
+    page.set_password(user["password"])
+    page.set_name(user["name"])
 
     create_btn = page.get_create_btn_2()
 
