@@ -18,7 +18,7 @@ WAIT_TIMEOUT = 200
 
 # =====================
 
-@pytest.mark.skip(reason="임시 비활성화")
+# @pytest.mark.skip(reason="임시 비활성화")
 def test_chat_basic_flow(driver):
     chat_basic_page = ChatBasicPage(driver)
     
@@ -74,6 +74,8 @@ def test_chat_basic_flow(driver):
     chat_basic_page.send_btn_is_enable(TEXT1)
     logger.info(" ✅ 검증 성공: 10. 일반 대화 전송 버튼 테스트 완료")
 
+
+# @pytest.mark.skip(reason="임시 비활성화")
 def test_chat_edit(driver):
     chat_basic_page = ChatBasicPage(driver)
 

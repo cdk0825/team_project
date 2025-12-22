@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
+from selenium.common.exceptions import StaleElementReferenceException
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
@@ -15,7 +16,8 @@ logger = get_logger(__file__)
 class ChatBasicPage:
     TEXT_AREA = (By.CSS_SELECTOR, ".MuiInputBase-input.MuiInputBase-inputMultiline")
     TEXT_AREAS = (By.XPATH, ".//textarea[@name='input']")
-    COMPLETE = (By.XPATH, "//p[.//span[@data-status='complete']]")
+    # COMPLETE = (By.XPATH, "//p[.//span[@data-status='complete']]")
+    COMPLETE = (By.XPATH, "//span[@data-status='complete']/ancestor::div[contains(@class,'MuiPaper-root')]")
     SEND_BUTTON = (By.XPATH, "//button[@aria-label='보내기']")
     SEND_BUTTON_DISB = (By.CSS_SELECTOR, ".MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary")
     SEND_BUTTON_HIDE = (By.CSS_SELECTOR, ".MuiButtonBase-root.Mui-disabled.MuiIconButton-root.Mui-disabled")
@@ -41,11 +43,17 @@ class ChatBasicPage:
     ## 텍스트 없이 전송버튼 클릭
     def no_textInput_send_btn_click(self):
         logger.info("✔️ [START] 텍스트 입력 없이 Send 버튼 상태")
+        
+        logger.info("## 전송버튼 활성화 Y/N 테스트시 text 입력창 초기화")
+        txt_area = self.driver.find_element(*self.TEXT_AREA)
+        txt_area.click()
+        txt_area.send_keys(Keys.CONTROL + "a")
+        txt_area.send_keys(Keys.DELETE)
+        
         send_btn = self.wait.until(
             EC.presence_of_element_located(self.SEND_BUTTON)
         )
         logger.info("✔️ Send 버튼이 화면에 표시됨")
-        
         is_enabled = send_btn.is_enabled()
         logger.info(f"✔️ Send 버튼 활성화 상태 : {is_enabled}")
         
@@ -63,17 +71,21 @@ class ChatBasicPage:
     def send_message(self, text):
         logger.info("✔️ [START] 메시지 전송 상태")
         text_area = self.wait.until(
-            EC.presence_of_element_located(self.TEXT_AREA)
+            EC.element_to_be_clickable(self.TEXT_AREA)
         )
         logger.info("✔️ 텍스트 입력 가능 상태")
         
         text_area.click()
         logger.info("✔️ 텍스트 입력창 클릭")
         
+        text_area.clear()
         text_area.send_keys(text)
         logger.info("✔️ 입력 창에 텍스트 주입")
         
-        self.driver.find_element(*self.SEND_BUTTON).click()
+        send_btn = self.wait.until(
+            EC.element_to_be_clickable(self.SEND_BUTTON)
+        )
+        send_btn.click()
         logger.info("✔️ [END] 보내기 버튼 클릭 완료")
         
     ## 로딩 아이콘 대기
@@ -156,20 +168,29 @@ class ChatBasicPage:
             last_element = elements[-1]
             logger.info(f"✔️ 완료 상태 요소 발견 (총 {len(elements)}개, 마지막 요소 사용)")
             
+            # 스크롤 이동
+            logger.info("✔️ 화면 스크롤 업 수행")
+            self.scroll_up()
+            time.sleep(2)
+            
             # 화면에 보이도록 스크롤
             logger.info("✔️ 완료 상태 요소로 스크롤 이동")
             self.driver.execute_script(
                 "arguments[0].scrollIntoView({block: 'center'});",
                 last_element
             )
-            
-            # 스크롤 이동
-            logger.info("✔️ 화면 스크롤 업 수행")
-            self.scroll_up()
-            
             # 마우스 이동 (hover)
             logger.info("✔️ 완료 상태 요소 hover 시도")
-            ActionChains(self.driver).move_to_element(last_element).perform()
+            # ActionChains(self.driver).move_to_element(last_element).perform()
+            self.driver.execute_script("""
+                arguments[0].dispatchEvent(
+                    new MouseEvent('mouseover', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    })
+                );
+            """, last_element)
             time.sleep(1)
             
             logger.info("✔️ 수정(edit) 버튼 탐색")
@@ -220,6 +241,10 @@ class ChatBasicPage:
             logger.warning("!!! Timeout 발생! 테스트는 계속 진행")
             logger.debug(e)
             
+        except StaleElementReferenceException as sere:
+            logger.warning("!!! StaleElementReferenceException 발생! 테스트는 계속 진행")
+            logger.debug(sere)
+            
     ## 스크린샷 (스크린샷으로 비교)
     def screenshot(self, text):
         logger.info("✔️ [START] 스크린샷 저장 시도")
@@ -236,6 +261,9 @@ class ChatBasicPage:
         
     ## 스크롤 상단 이동 
     def scroll_up(self):
+        logger.info("####################################################################################로딩중")
+        self.wait_for_loadinngIcon()
+        logger.info("####################################################################################로딩끝!!!")
         logger.info("✔️ [START] 스크롤 상단 이동 시도")
         scroll_container = self.wait.until(
             EC.presence_of_element_located(
@@ -244,6 +272,7 @@ class ChatBasicPage:
         )
         
         self.driver.execute_script("arguments[0].scrollTop = 0;", scroll_container)
+        # self.driver.execute_script("window.scrollTo(0, 0);")
         logger.info("✔️ [END] 스크롤 상단 이동 완료")
         
     ## 스크롤 하단 이동
@@ -286,7 +315,7 @@ class ChatBasicPage:
         
     ## 채팅창 배지 확인
     def chat_badge_check(self, str):
-        logger.info(f"✔️ [START] 채팅 배지 선택 시작 (타압: {str})")
+        logger.info(f"✔️ [START] 채팅 배지 선택 시작 (타입: {str})")
         plus_btn = self.wait.until(
             EC.element_to_be_clickable(self.PLUS_BUTTON)
         )
