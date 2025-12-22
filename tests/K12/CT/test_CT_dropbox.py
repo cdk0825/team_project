@@ -26,24 +26,24 @@ def test_CT_dropbox(driver, school):
     page.click_sch_lv()
     school_opts = page.get_sch_lvs()
     driver.find_element(By.XPATH, f"//li[text()='{school}']").click()
-    print("학교급 옵션:", school_opts)
+    logger.info(f"학교급 옵션: {school_opts}")
     logger.info("학교급 목록이 출력되었습니다.")
 
     page.click_grade_lv()
     grade_opts = page.get_grade_lvs()
     driver.find_element(By.XPATH, f"//li[text()='{grade_opts[0]}']").click()
-    print(f"{school_opts[0]} 선택 → 학년:", grade_opts)
+    logger.info(f"{school} 선택 → 학년: {grade_opts}")
     logger.info("학년별 목록이 출력되었습니다.")
 
     page.CT_click_sub()
     sub_opts = page.CT_get_subs()
     driver.find_element(By.XPATH, f"//li[text()='{sub_opts[0]}']").click()
-    print(f"{grade_opts[0]} 선택 → 과목:", sub_opts)
+    logger.info(f"{grade_opts[0]} 선택 → 과목: {sub_opts}")
     logger.info("과목별 목록이 출력되었습니다.")
 
     page.click_time()
     time_opts = page.get_times()
-    print(f"{sub_opts[0]} 선택 → 수업시간:", time_opts)
+    logger.info(f"{sub_opts[0]} 선택 → 수업시간: {time_opts}")
     logger.info("수업시간 목록이 출력되었습니다.")
 
     assert school_opts, "학교급 옵션이 없음"

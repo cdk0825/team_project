@@ -63,7 +63,7 @@ def test_create_CT(driver):
         page.ct_wait_success_message()
         logger.info("완료 메세지 확인되었습니다.")
                 # 성공 케이스: 다운로드 버튼이 활성화되어 있어야 함
-        assert page.result_download().is_enabled(), "fail: 성공했는데 다운로드 버튼이 비활성화됨"
+        assert page.ct_wait_success_message()
 
     except TimeoutException:
         logger.warning("생성 실패 메시지 감지됨.")

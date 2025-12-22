@@ -4,6 +4,7 @@ from src.utils import login
 from data.config import USERNAME5, PASSWORD5
 from selenium.webdriver.common.by import By
 from src.utils.logger import get_logger
+from selenium.common.exceptions import TimeoutException
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
@@ -48,6 +49,9 @@ def test_recreate_CT(driver):
 
     page.wait_generation_complete()
 
-    complete_msg = page.ct_wait_success_message()
+    try:
+        complete_msg = page.ct_wait_success_message()
+    except TimeoutException:
+        logger.warning("생성 실패 메시지 감지됨.")
 
     assert len(complete_msg) == 1, "완료 메세지는 하나여야 합니다."

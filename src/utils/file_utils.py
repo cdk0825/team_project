@@ -12,15 +12,15 @@ def wait_for_download(download_dir, expected_ext=None, timeout=60):
 
         if expected_ext:
             # 특정 확장자 파일만 필터링
-            # (다운로드 중인 .crdownload 파일 제외)
+            # (다운로드 중인 .crdownload, .tmp 파일 제외)
             files = [
                 f for f in files
-                if f.endswith(expected_ext) and not f.endswith(".crdownload")
+                if f.endswith(expected_ext) and not f.endswith(".crdownload") and not f.endswith(".tmp")
             ]
         else:
             files = [
                 f for f in files
-                if not f.endswith(".crdownload")
+                if not f.endswith(".crdownload") and not f.endswith(".tmp")
             ]
 
         # 조건에 맞는 파일이 있으면 반환

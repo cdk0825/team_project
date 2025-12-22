@@ -1,11 +1,12 @@
-# loginlogout/login.py
-from src.pages.joinlogin_page import JoinLoginPage
+from src.pages.account_page import AccountPage
 import os
 import json
 import pytest
 import time
 from src.utils.logger import get_logger
 from pathlib import Path
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 
 # === logger 설정 시작 ===
@@ -27,7 +28,7 @@ F1HEL-T32 : 유효한 계정의 비밀번호 불일치 로그인 테스트
 '''
 @pytest.mark.parametrize("data", login_data_list)
 def test_login_cases(driver, data):
-    page = JoinLoginPage(driver)
+    page = AccountPage(driver)
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
 
     try:
@@ -54,7 +55,8 @@ def test_login_cases(driver, data):
         else:
             # Email과 password 중 하나가 틀린 경우
             if data["expected_result"] == 'failure_notmatch':
-                time.sleep(3)
+                WebDriverWait(driver, 10).until(
+                lambda d: data["expected_msg"] in d.page_source)
                 assert data["expected_msg"] in driver.page_source
             # Email 공백 로그인 하는 경우
             elif data["expected_result"] == 'failure_empty_em':

@@ -1,4 +1,3 @@
-
 from src.pages.k2_page import K12Note
 from src.utils import login
 from data.config import USERNAME5, PASSWORD5
@@ -23,7 +22,6 @@ def test_BG_succes(driver):
     page.click_BG_tab()
     logger.info("행동특성 및 종합의견 탭 활성화")
 
-   
     page.BG_upload_exel_succes()
     logger.info("행동특성 및 종합의견 엑셀 첨부")
 

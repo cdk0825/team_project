@@ -5,6 +5,7 @@ from src.utils.logger import get_logger
 from src.utils import login
 from src.pages.chat_basic_page import ChatBasicPage
 from data.config import USERNAME1, PASSWORD1
+from data.chat_basic_data import TEXT1, TEXT2, TEXT3, TEXT4, TEXT5, TEXT6, TEXT7, TEXT8
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
@@ -14,20 +15,7 @@ logger = get_logger(__file__)
 BASE_URL = os.environ.get("BASE_URL", "https://qaproject.elice.io")
 WAIT_TIMEOUT = 200
 
-TEXT1 = "QA"
-TEXT2 = "QA 관련 업무스킬 알려줘"
-TEXT3 = "빅뱅이론과 평행 우주에 대해 설명하고 근거를 제시해서 짧게 설명해줘"
-TEXT4 = "ㄹ햐ㅙㅑㅊㅈ지도랴온ㄴ랴로"
-TEXT5 = "ㅍ ㅏ이선에서 리트 만드는거 알줘"
-TEXT6 = "그럼 예제 보여줘"
-TEXT7 = """AI 챗봇은 최근 다양한 산업 분야에서 활발하게 활용되고 있으며, 
-        자연어 처리 기술을 기반으로 사용자와 실시간 대화를 수행할 수 있습니다. 
-        이러한 챗봇은 단순한 FAQ 응답을 넘어서, 문서 분석, 이미지 인식, 
-        음성 처리 등 멀티모달 기능을 제공하며, 기업의 고객 지원, 마케팅, 
-        교육, 헬스케어 등 다양한 분야에서 효율성을 높이는 데 기여합니다. 
-        또한 사용자는 챗봇을 통해 데이터를 빠르게 검색하고, 정보를 요약하며, 
-        반복적인 작업을 자동화할 수 있습니다."""
-TEXT8 = "안녕~"
+
 # =====================
 
 @pytest.mark.skip(reason="임시 비활성화")

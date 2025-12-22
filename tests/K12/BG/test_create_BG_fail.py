@@ -1,4 +1,3 @@
-
 from src.pages.k2_page import K12Note
 from src.utils import login
 from data.config import USERNAME4, PASSWORD4
@@ -32,7 +31,6 @@ def test_BG_nofile(driver):
     page.create_btn()
 
     assert not page.result_download().is_enabled(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
-
 
     # 행동특성 종합의견 생성 실패(미지원 파일 첨부)
 def test_BG_wrongfile(driver):

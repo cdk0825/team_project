@@ -24,6 +24,7 @@ class UpdatePage:
     def ok_btn(self):
         return self.driver.find_element(By.XPATH, "//button[contains(text(),'완료')]")
     
+    # 이름 변경 함수
     def update_name(self, new_name):
         wait = WebDriverWait(self.driver, 10)
         update_icon_locator = (By.XPATH, "//button[@type='button' and contains(@class,'MuiIconButton-root')]")

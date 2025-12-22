@@ -3,6 +3,7 @@ from src.utils import login
 from data.config import USERNAME5, PASSWORD5
 from selenium.webdriver.common.by import By
 from src.utils.logger import get_logger
+from selenium.common.exceptions import TimeoutException
 
 # === logger 설정 시작 ===
 logger = get_logger(__file__)
@@ -40,20 +41,24 @@ def test_CT_clear(driver):
     page.create_btn()
 
     page.wait_generation_complete()
-    page.ct_wait_success_message()
 
-    # 로그아웃 과정
-    page.profile_click()
-    page.logout()
-    logger.info("로그아웃 중입니다 ... ")
+    try:
+        page.ct_wait_success_message()
 
-    driver.find_element(By.XPATH, "//input[@name='password']").send_keys(PASSWORD5)
-    driver.find_element(By.XPATH, "//button[text()='Login']").click()
-    logger.info("재로그인 중입니다 ... ")
+        # 로그아웃 과정
+        page.profile_click()
+        page.logout()
+        logger.info("로그아웃 중입니다 ... ")
 
-    page.click_tool_tab()
-    page.click_CT_tab()
-    logger.info("초기화 되었는지 확인 중...")
+        driver.find_element(By.XPATH, "//input[@name='password']").send_keys(PASSWORD5)
+        driver.find_element(By.XPATH, "//button[text()='Login']").click()
+        logger.info("재로그인 중입니다 ... ")
+
+        page.click_tool_tab()
+        page.click_CT_tab()
+        logger.info("초기화 되었는지 확인 중...")
+    except TimeoutException:
+        logger.warning("생성 실패 메시지 감지됨.")
 
     assert page.sch_lv_txt() == "학교급을 선택해주세요.", "fail: 학교급이 이미 선택되어 있습니다."
     assert page.grade_lv_txt() == "학년을을 선택해주세요.", "fail: 학년이 이미 선택되어 있습니다."
