@@ -8,6 +8,14 @@ from src.pages.main_page import MainPage
 from src.utils import login
 from data.config import USERNAME, PASSWORD
 import os
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 # 테스트용 다운로드 디렉토리
 @pytest.fixture
@@ -43,9 +51,9 @@ def driver(download_dir):
 
 @pytest.fixture
 def logged_in_main_page_setup(driver):
-    print("\n[SETUP] ⚙️ 액션: 관리자 로그인 시작")
+    logger.info("\n[SETUP] ⚙️ 액션: 관리자 로그인 시작")
     login(driver, USERNAME, PASSWORD)
-    print("[SETUP] ✅ 액션: 관리자 로그인 완료")
+    logger.info("[SETUP] ✅ 액션: 관리자 로그인 완료")
 
     main = MainPage(driver)
 
@@ -53,9 +61,9 @@ def logged_in_main_page_setup(driver):
 
 @pytest.fixture
 def logged_in_driver(driver):
-    print("\n[SETUP] ⚙️ 액션: 관리자 로그인 시작")
+    logger.info("\n[SETUP] ⚙️ 액션: 관리자 로그인 시작")
     login(driver, USERNAME, PASSWORD)
-    print("[SETUP] ✅ 액션: 관리자 로그인 완료")
+    logger.info("[SETUP] ✅ 액션: 관리자 로그인 완료")
 
     MainPage(driver)
 
