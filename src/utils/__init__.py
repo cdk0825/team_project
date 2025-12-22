@@ -5,6 +5,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from datetime import datetime
 import os
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 def login(driver, USERNAME, PASSWORD):
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
@@ -33,7 +41,7 @@ def capture_screenshot(driver, save_path="reports/screenshots", title="screensho
 
     try:
         driver.save_screenshot(full_path)
-        print(f"✅ 스크린샷이 성공적으로 저장되었습니다: {full_path}")
+        logger.info(f"✅ 스크린샷이 성공적으로 저장되었습니다: {full_path}")
     except Exception as e:
-        print(f"❌ 스크린샷 저장 중 오류 발생: {e}")
+        logger.error(f"❌ 스크린샷 저장 중 오류 발생: {e}")
 
