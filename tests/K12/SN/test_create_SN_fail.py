@@ -42,7 +42,9 @@ def test_create_SN_fail_nofile(driver):
 
     page.create_btn()
 
-    assert not page.sn_wait_success_message().is_displayed(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
+    assert not page.result_download().is_enabled(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
+
+    #assert not page.sn_wait_success_message().is_displayed(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
 
     
 # 세부특기 생성 실패 (미지원 파일 첨부)

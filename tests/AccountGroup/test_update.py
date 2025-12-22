@@ -84,7 +84,6 @@ def test_update_email(driver,data):
         logger.info(page.error_mag())
         assert data["expected_msg"] == page.error_mag()
 
-    ##### 인증 횟수때메 일단 보류 
     elif data['category']=='wrong_code':
         page.btn_send_code().click()
         page.wait_and_send_input_code()

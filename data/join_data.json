@@ -22,28 +22,28 @@
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f200@never.com",
+    "loginId": "tester.zu.digimon+test1@never.com",
     "password": "F1Race1208!",
     "name": "실패3",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
       {
-    "loginId": "테스터+f210@naver.com",
+    "loginId": "테스터+test2@naver.com",
     "password": "F1Race1208!",
     "name": "실패4",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f220@지메일.com",
+    "loginId": "tester.zu.digimon+test3@지메일.com",
     "password": "F1Race1208!",
     "name": "실패5",
     "expected_result" : "failure_email",
     "expected_msg" : "Email address is incorrect."
   },
   {
-    "loginId": "tester.zu.digimon+f230@@gmail.com",
+    "loginId": "tester.zu.digimon+test4@@gmail.com",
     "password": "F1Race1208!",
     "name": "실패6",
     "expected_result" : "failure_email",

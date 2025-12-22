@@ -40,6 +40,7 @@ def test_SN_clear(driver):
         page.profile_click()
 
         page.logout()
+        logger.info("로그아웃 중입니다 ... ")
         driver.find_element(By.XPATH, "//input[@name='password']").send_keys(PASSWORD5)
         driver.find_element(By.XPATH, "//button[text()='Login']").click()
         page.click_tool_tab()
