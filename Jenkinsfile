@@ -1,8 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'python:3.11'}
+    }
 
     environment {
-        PYTHON_VERSION = 'python3'
+        PYTHON_VERSION = 'python'
     }
 
     stages {
@@ -14,20 +16,20 @@ pipeline {
             }
         }
 
-        stage('Python Version Check') {
-            steps {
-                sh '''
-                ${PYTHON_VERSION} --version
-                '''
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 echo '📦 의존성 설치'
                 sh '''
                 ${PYTHON_VERSION} -m pip install --upgrade pip
-                pip install -r requirements.txt
+                ${PYTHON_VERSION} -m pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Python Version Check') {
+            steps {
+                sh '''
+                ${PYTHON_VERSION} --version
                 '''
             }
         }
