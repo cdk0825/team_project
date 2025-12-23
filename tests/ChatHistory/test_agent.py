@@ -1,13 +1,9 @@
 from src.pages.agent_page import AgentPage
 from data.chat_history_data import EXPECTED_AGENT_URL, SEARCN_AGENT_KEYWORD, NON_EXISTENT_KEYWORD, QA_AGENT_TITLE
 import pytest
-import logging
+from src.utils.logger import get_logger
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 def test_agent_lists(logged_in_driver):
     logger.info("--- 🆕 [F1HEL-T4] TC 실행: 에이전트 목록 확인 ---")

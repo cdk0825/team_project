@@ -1,13 +1,8 @@
 from data.chat_history_data import (EXPECTED_AGENT_URL, EXPECTED_CHAT_URL, NEW_SESSION_CHAT_KEYWORD, PAST_SESSION_CHAT_KEYWORD)
-import logging
 import pytest
+from src.utils.logger import get_logger
 
-# 로거 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 # 새 대화 세션 생성 테스트
 def test_navigate_to_new_chat(driver, logged_in_main_page_setup):

@@ -1,13 +1,9 @@
 from data.chat_history_data import NEW_KEYWORD, MODIFY_TITLE_NAME, SPECIAL_CHAR_SAMPLES, NONE_TEXT
-import logging
 import pytest
 
-# 로거 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+from src.utils.logger import get_logger
+
+logger = get_logger(__file__)
 
 # 히스토리 검색 모달창 확인 테스트
 def test_open_search_history_modal(logged_in_main_page_setup):
