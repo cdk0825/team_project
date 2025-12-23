@@ -46,8 +46,11 @@ pipeline {
         }
         stage('Prepare') {
             steps {
-                // 기존 screenshots 폴더가 있다면 강제로 삭제하고 새로 만듭니다.
-                sh 'rm -rf screenshots && mkdir screenshots'
+                echo '🧹 이전 스크린샷 및 리포트 삭제 중...'
+                // screenshots 폴더가 있으면 지우고, 다시 빈 폴더를 만듭니다.
+                sh 'rm -rf screenshots && mkdir -p screenshots'
+                // 이전 xml 리포트도 지웁니다.
+                sh 'rm -f pytest-report.xml'
             }
 }
     }
