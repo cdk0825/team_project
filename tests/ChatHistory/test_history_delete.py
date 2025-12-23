@@ -1,10 +1,6 @@
-import logging
+from src.utils.logger import get_logger
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 # 히스토리 삭제 성공 테스트
 def test_delete_history(logged_in_main_page_setup):
