@@ -1,12 +1,8 @@
 import pytest
-import logging
 from data.chat_history_data import MODIFY_TITLE_NAME, MAX_LENGTH_TITLE, MAX_LENGTH_OVER_TITLE
+from src.utils.logger import get_logger
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__file__)
 
 # 히스토리 타이틀 변경 성공 테스트
 def test_modify_history_title(logged_in_main_page_setup):

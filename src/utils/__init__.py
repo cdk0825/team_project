@@ -5,14 +5,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from datetime import datetime
 import os
-import logging
+from src.utils.logger import get_logger
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
-logger = logging.getLogger(__name__)
-
+logger = get_logger(__file__)
 
 def login(driver, USERNAME, PASSWORD):
     driver.get("https://qaproject.elice.io/ai-helpy-chat")
