@@ -39,46 +39,46 @@ def driver(download_dir):
     """크롬 브라우저를 열고 테스트 후 닫는 pytest fixture"""    
     options = webdriver.ChromeOptions()
     
-    # CI라는 이름의 환경 변수가 있으면 Headless 모드로 작동 (젠킨스용)
-    # 환경 변수가 없으면(로컬) 브라우저 창이 뜸
-    if os.environ.get('JENKINS_URL') or os.environ.get('CI'):
-        options.add_argument('--headless=new')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        print("🚀 [DEBUG] 젠킨스 전용 최신 설정이 적용되었습니다!") # 이 한 줄 추가
-        # 브라우저 언어를 한국어로 설정
-        options.add_argument('--lang=ko_KR')
-        # [추가 팁] 헤더 정보도 한국어로 전달
-        options.add_experimental_option('prefs', {'intl.accept_languages': 'ko,ko_KR'})
-        
-        # 🛠️ [추가 추천] GPU 가속 비활성화 (도커 환경에서 안정성 향상)
-        options.add_argument('--disable-gpu')
-        
-        options.add_argument('--disable-software-rasterizer')
-        
-        # 🛡️ [추가] 젠킨스 환경에서 봇 차단을 피하기 위한 설정
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-        options.add_argument(f'user-agent={user_agent}')
-    
-    options.add_argument('--window-size=1920x1080')
-    
-    
-    # 테스트 시작 전 다운로드 폴더 정리
-    clean_download_dir(download_dir)
-    
-    # 크롬 다운로드 관련 설정
-    prefs = {
+    # 1. 공통으로 사용할 기본 prefs 사전 생성
+    # 다운로드 설정 등을 기본으로 넣어둡니다.
+    browser_prefs = {
         "download.default_directory": download_dir,
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True,
     }
-    options.add_experimental_option("prefs", prefs)
+
+    # 2. 젠킨스/CI 환경 전용 설정
+    if os.environ.get('JENKINS_URL') or os.environ.get('CI'):
+        options.add_argument('--headless=new')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-software-rasterizer')
+        options.add_argument('--lang=ko_KR')
+        
+        
+        # [중요] 기존 browser_prefs에 한국어 설정을 추가(update)합니다.
+        browser_prefs.update({
+            "intl.accept_languages": "ko,ko-KR",
+            "profile.default_content_languages": "ko-KR"
+        })
+        
+        print("🚀 [DEBUG] 젠킨스 전용 최신 설정(언어/환경)이 통합 적용되었습니다!")
+        
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+        options.add_argument(f'user-agent={user_agent}')
+
+    # 3. 통합된 prefs를 딱 한 번만 적용
+    options.add_experimental_option("prefs", browser_prefs)
+
+    # 4. 기타 옵션 및 드라이버 실행
+    options.add_argument('--window-size=1920x1080')
+    clean_download_dir(download_dir)
 
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(options=options, service=service)  # Chrome 브라우저 열기
+    driver = webdriver.Chrome(options=options, service=service)
     
-    # 브라우저 사이즈 강제 고정
     driver.set_window_size(1920, 1080)
     
     driver.implicitly_wait(5)  # 암묵적 대기: 요소 로딩 최대 5초까지 대기
