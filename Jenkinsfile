@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // 서버에 설치한 실행 파일 이름에 맞춰 수정 (예: python3.11 또는 python3)
+        // 반드시 우리가 설치 확인한 'python3.11'로 설정
         PYTHON_CMD = 'python3.11'
     }
 
@@ -16,9 +16,7 @@ pipeline {
 
         stage('Python Version Check') {
             steps {
-                // environment 변수를 쓸 때는 $변수명 형식을 권장합니다.
-                sh 'python --version'
-                sh 'pip --version'
+                sh "$PYTHON_CMD --version"
             }
         }
 
@@ -28,18 +26,20 @@ pipeline {
                 sh """
                 set -e
                 
-                # 2. 가상환경 활성화 및 패키지 설치
+                # 1. 가상환경 생성 및 활성화 (이 부분이 반드시 들어가야 합니다)
+                $PYTHON_CMD -m venv venv
+                . venv/bin/activate
+                
+                # 2. 가상환경 안에서는 'pip' 명령어를 바로 쓸 수 있습니다.
                 pip install --upgrade pip
                 
-                # requirements.txt가 있을 때만 설치
                 if [ -f requirements.txt ]; then
                     pip install -r requirements.txt
                 fi
                 
-                # pytest는 필수 설치
                 pip install pytest
                 
-                # 3. 테스트 실행 (이 단계에서 실행해야 가상환경 패키지를 인식함)
+                # 3. 테스트 실행
                 pytest tests/ --junitxml=pytest-report.xml || true
                 """
             }
@@ -47,12 +47,6 @@ pipeline {
     }
 
     post {
-        success {
-            echo '✅ CI 테스트 성공'
-        }
-        failure {
-            echo '❌ CI 테스트 실패'
-        }
         always {
             echo '📌 테스트 리포트 아카이브'
             junit allowEmptyResults: true, testResults: 'pytest-report.xml'
