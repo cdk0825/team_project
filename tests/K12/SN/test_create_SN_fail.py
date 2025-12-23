@@ -41,6 +41,7 @@ def test_create_SN_fail_nofile(driver):
     logger.info("파일 미첨부")
 
     page.create_btn()
+    
 
     assert not page.result_download().is_enabled(), "fail: 첨부파일이 없는데 결과가 생성되었습니다."
 

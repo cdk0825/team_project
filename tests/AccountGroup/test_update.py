@@ -2,6 +2,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from src.pages.update_page import UpdatePage
 from src.utils import login
 from data.config import USERNAME5, PASSWORD5
+from data.config import USERNAME3, PASSWORD3
 import pytest
 import os
 import json
@@ -39,7 +40,7 @@ def test_update_name(driver,data):
     logger.info("===이름 변경 테스트 시작===")
     wait = WebDriverWait(driver, 10)
     page = UpdatePage(driver)
-    login(driver, USERNAME5, PASSWORD5)
+    login(driver, USERNAME3, PASSWORD3)
     logger.info("로그인 완료")
     page.go_to_setting()
     logger.info("정보 수정 페이지 활성화")
@@ -70,7 +71,7 @@ def test_update_name(driver,data):
 def test_update_email(driver,data):
     logger.info("===이메일 변경 테스트 시작===")
     page = UpdatePage(driver)
-    login(driver, USERNAME5, PASSWORD5)
+    login(driver, USERNAME3, PASSWORD3)
     logger.info("로그인 완료")
     page.go_to_setting()
     logger.info("정보 수정 페이지 활성화")
@@ -102,7 +103,7 @@ def test_update_email(driver,data):
 def test_update_phone(driver,data):
     logger.info("===핸드폰 변경 테스트 시작===")
     page = UpdatePage(driver)
-    login(driver, USERNAME5, PASSWORD5)
+    login(driver, USERNAME3, PASSWORD3)
     logger.info("로그인 완료")
 
     page.go_to_setting()
@@ -131,7 +132,7 @@ def test_update_password(driver,data):
     logger.info("===비밀번호 변경 테스트===")
     wait = WebDriverWait(driver, 10)
     page = UpdatePage(driver)
-    login(driver, USERNAME5, PASSWORD5)
+    login(driver, USERNAME3, PASSWORD3)
     logger.info("로그인 완료")
 
     page.go_to_setting()
@@ -160,4 +161,5 @@ def test_update_password(driver,data):
         element = wait.until(
         EC.visibility_of_element_located((By.ID, "notistack-snackbar")))
         # page.update_env(data["new_pw"])
+
         assert element.is_displayed(), "Fail: 변경완료 notistack div가 보이지 않음"
