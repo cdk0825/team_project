@@ -9,6 +9,7 @@ from src.utils import login
 from data.config import USERNAME, PASSWORD
 import os
 import logging
+import shutil
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +17,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
+# 세션 시작 시 딱 한 번 실행되어 폴더를 초기화합니다.
+@pytest.fixture(scope="session", autouse=True)
+def clean_screenshots():
+    screenshot_dir = "screenshots"
+    if os.path.exists(screenshot_dir):
+        print(f"\n🧹 기존 스크린샷 삭제 중: {screenshot_dir}")
+        shutil.rmtree(screenshot_dir)
+    os.makedirs(screenshot_dir, exist_ok=True)
+    
 # 테스트용 다운로드 디렉토리
 @pytest.fixture
 def download_dir():
