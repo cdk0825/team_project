@@ -48,8 +48,12 @@ pipeline {
 
     post {
         always {
-            echo '📌 테스트 리포트 아카이브'
+            echo '📌 테스트 리포트 및 스크린샷 보관'
+            // 1. 테스트 결과 리포트 보관
             junit allowEmptyResults: true, testResults: 'pytest-report.xml'
+            
+            // 2. 실패 시 찍힌 스크린샷 파일을 젠킨스 화면에 표시하도록 보관
+            archiveArtifacts artifacts: 'screenshots/*.png', allowEmptyArchive: true
         }
     }
 }

@@ -36,6 +36,13 @@ def driver(download_dir):
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        
+        # 🛡️ [추가] 젠킨스 환경에서 봇 차단을 피하기 위한 설정
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+        options.add_argument(f'user-agent={user_agent}')
+        
+        # 🛠️ [추가 추천] GPU 가속 비활성화 (도커 환경에서 안정성 향상)
+        options.add_argument('--disable-gpu')
     
     options.add_argument('--window-size=1920x1080')
     
@@ -78,3 +85,28 @@ def logged_in_driver(driver):
     MainPage(driver)
 
     return driver
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # 테스트 결과를 가져옵니다.
+    outcome = yield
+    rep = outcome.get_result()
+    
+    # 테스트가 실패('call')했을 경우에만 실행됩니다.
+    if rep.when == 'call' and rep.failed:
+        try:
+            # driver 피스처를 사용하는 테스트인지 확인
+            if 'driver' in item.fixturenames:
+                web_driver = item.funcargs['driver']
+                
+                # 프로젝트 루트에 screenshots 폴더 생성
+                screenshot_dir = "screenshots"
+                if not os.path.exists(screenshot_dir):
+                    os.makedirs(screenshot_dir)
+                
+                # 파일명을 테스트 함수 이름으로 설정 (예: test_login_fail.png)
+                file_path = os.path.join(screenshot_dir, f"{item.name}.png")
+                web_driver.save_screenshot(file_path)
+                print(f"\n📸 스크린샷 저장 완료: {file_path}")
+        except Exception as e:
+            print(f"❌ 스크린샷 저장 실패: {e}")
