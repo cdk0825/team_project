@@ -36,6 +36,10 @@ def driver(download_dir):
         options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        # 브라우저 언어를 한국어로 설정
+        options.add_argument('--lang=ko_KR')
+        # [추가 팁] 헤더 정보도 한국어로 전달
+        options.add_experimental_option('prefs', {'intl.accept_languages': 'ko,ko_KR'})
         
         # 🛠️ [추가 추천] GPU 가속 비활성화 (도커 환경에서 안정성 향상)
         options.add_argument('--disable-gpu')
