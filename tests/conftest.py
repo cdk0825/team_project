@@ -36,6 +36,7 @@ def driver(download_dir):
         options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        print("🚀 [DEBUG] 젠킨스 전용 최신 설정이 적용되었습니다!") # 이 한 줄 추가
         # 브라우저 언어를 한국어로 설정
         options.add_argument('--lang=ko_KR')
         # [추가 팁] 헤더 정보도 한국어로 전달
@@ -67,6 +68,10 @@ def driver(download_dir):
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(options=options, service=service)  # Chrome 브라우저 열기
+    
+    # 브라우저 사이즈 강제 고정
+    driver.set_window_size(1920, 1080)
+    
     driver.implicitly_wait(5)  # 암묵적 대기: 요소 로딩 최대 5초까지 대기
     yield driver
     driver.delete_all_cookies()
