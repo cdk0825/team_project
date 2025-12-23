@@ -33,16 +33,18 @@ def driver(download_dir):
     # CI라는 이름의 환경 변수가 있으면 Headless 모드로 작동 (젠킨스용)
     # 환경 변수가 없으면(로컬) 브라우저 창이 뜸
     if os.environ.get('JENKINS_URL') or os.environ.get('CI'):
-        options.add_argument('--headless')
+        options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        
+        # 🛠️ [추가 추천] GPU 가속 비활성화 (도커 환경에서 안정성 향상)
+        options.add_argument('--disable-gpu')
+        
+        options.add_argument('--disable-software-rasterizer')
         
         # 🛡️ [추가] 젠킨스 환경에서 봇 차단을 피하기 위한 설정
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
         options.add_argument(f'user-agent={user_agent}')
-        
-        # 🛠️ [추가 추천] GPU 가속 비활성화 (도커 환경에서 안정성 향상)
-        options.add_argument('--disable-gpu')
     
     options.add_argument('--window-size=1920x1080')
     
