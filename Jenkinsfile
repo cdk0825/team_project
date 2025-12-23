@@ -27,6 +27,9 @@ pipeline {
                 sh """
                 set -e
                 
+                # pip이 없는 환경 대응
+                $PYTHON_CMD -m ensurepip --upgrade || true
+                
                 # 2. 가상환경 활성화 및 패키지 설치
                 $PYTHON_CMD -m pip install --upgrade pip
                 
