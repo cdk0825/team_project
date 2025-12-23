@@ -44,6 +44,12 @@ pipeline {
                 """
             }
         }
+        stage('Prepare') {
+            steps {
+                // 기존 screenshots 폴더가 있다면 강제로 삭제하고 새로 만듭니다.
+                sh 'rm -rf screenshots && mkdir screenshots'
+            }
+}
     }
 
     post {
