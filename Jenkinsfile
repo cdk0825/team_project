@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.11'
-            args '-u root'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -17,8 +12,8 @@ pipeline {
         stage('Python Version Check') {
             steps {
                 // environment 변수를 쓸 때는 $변수명 형식을 권장합니다.
-                sh 'python --version'
-                sh 'pip --version'
+                sh 'python3 --version'
+                sh 'pip3 --version'
             }
         }
 
@@ -29,15 +24,15 @@ pipeline {
                 set -e
                 
                 # 2. 가상환경 활성화 및 패키지 설치
-                pip install --upgrade pip
+                pip3 install --upgrade pip
                 
                 # requirements.txt가 있을 때만 설치
                 if [ -f requirements.txt ]; then
-                    pip install -r requirements.txt
+                    pip3 install -r requirements.txt
                 fi
                 
                 # pytest는 필수 설치
-                pip install pytest
+                pip3 install pytest
                 
                 # 3. 테스트 실행 (이 단계에서 실행해야 가상환경 패키지를 인식함)
                 pytest tests/ --junitxml=pytest-report.xml || true
