@@ -43,3 +43,5 @@ def get_logger(module_file=__file__, level=logging.INFO):
         logger.addHandler(console_handler)
 
     return logger
+
+logger = get_logger()
