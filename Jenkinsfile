@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // 서버에 설치한 실행 파일 이름에 맞춰 수정 (예: python3.11 또는 python3)
-        PYTHON_CMD = 'python3.11'
+        PYTHON_CMD = 'python3'
     }
 
     stages {
