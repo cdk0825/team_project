@@ -30,6 +30,16 @@ def driver(download_dir):
     """크롬 브라우저를 열고 테스트 후 닫는 pytest fixture"""    
     options = webdriver.ChromeOptions()
     
+    # CI라는 이름의 환경 변수가 있으면 Headless 모드로 작동 (젠킨스용)
+    # 환경 변수가 없으면(로컬) 브라우저 창이 뜸
+    if os.environ.get('JENKINS_URL') or os.environ.get('CI'):
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+    
+    options.add_argument('--window-size=1920x1080')
+    
+    
     # 테스트 시작 전 다운로드 폴더 정리
     clean_download_dir(download_dir)
     
