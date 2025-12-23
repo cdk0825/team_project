@@ -1,9 +1,9 @@
 pipeline {
-    agent any
-
-    environment {
-        // 서버에 설치한 실행 파일 이름에 맞춰 수정 (예: python3.11 또는 python3)
-        PYTHON_CMD = 'python3'
+    agent {
+        docker {
+            image 'python:3.11'
+            args '-u root'
+        }
     }
 
     stages {
@@ -17,7 +17,8 @@ pipeline {
         stage('Python Version Check') {
             steps {
                 // environment 변수를 쓸 때는 $변수명 형식을 권장합니다.
-                sh "$PYTHON_CMD --version"
+                sh 'python --version'
+                sh 'pip --version'
             }
         }
 
@@ -27,19 +28,16 @@ pipeline {
                 sh """
                 set -e
                 
-                # pip이 없는 환경 대응
-                $PYTHON_CMD -m ensurepip --upgrade || true
-                
                 # 2. 가상환경 활성화 및 패키지 설치
-                $PYTHON_CMD -m pip install --upgrade pip
+                pip install --upgrade pip
                 
                 # requirements.txt가 있을 때만 설치
                 if [ -f requirements.txt ]; then
-                    $PYTHON_CMD -m pip install -r requirements.txt
+                    pip install -r requirements.txt
                 fi
                 
                 # pytest는 필수 설치
-                $PYTHON_CMD -m pip install pytest
+                pip install pytest
                 
                 # 3. 테스트 실행 (이 단계에서 실행해야 가상환경 패키지를 인식함)
                 pytest tests/ --junitxml=pytest-report.xml || true
