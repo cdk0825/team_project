@@ -25,6 +25,7 @@ pipeline {
 
         stage('Python Version Check') {
             steps {
+                // python 버전확인
                 sh "$PYTHON_CMD --version"
             }
         }
@@ -35,7 +36,7 @@ pipeline {
                 sh """
                 set -e
                 
-                # 1. 가상환경 생성 및 활성화 (이 부분이 반드시 들어가야 합니다)
+                # 1. 가상환경 생성 및 활성화 
                 $PYTHON_CMD -m venv venv
                 . venv/bin/activate
                 

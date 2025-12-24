@@ -73,6 +73,7 @@ def driver(download_dir):
     options.add_experimental_option("prefs", browser_prefs)
 
     # 4. 기타 옵션 및 드라이버 실행
+    # 브라우저 사이즈 설정 설정이 안되어 있을 경우 화면에서 엘리먼트 못찾음
     options.add_argument('--window-size=1920x1080')
     clean_download_dir(download_dir)
 
