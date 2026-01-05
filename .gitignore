@@ -17,3 +17,4 @@ downloads/
 
 **/logs/**
 
+/allure-results/

@@ -35,13 +35,13 @@ def test_multi_modal(driver):
     
     logger.info(" [SETUP] ⚙️ 액션: 3. 채팅창 배지선택 후 텍스트 넣어 보내기 시작")
     chat_basic_page.chat_badge_check("A")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT11)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT11)            ## 텍스트 입려 후 보내기
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
     logger.info("✅ 검증 성공: 3. 채팅창 배지선택 후 텍스트 넣어 보내기 완료")
     
     logger.info(" [SETUP] ⚙️ 액션: 4. 이미지 생성 후 취소, 재생성 시작")
     chat_basic_page.chat_badge_check("A")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT12)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT12)            ## 텍스트 입려 후 보내기
     chat_basic_page.chat_stop()                     ## 생성 취소
     chat_basic_page.recreate()                      ## 재생성
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
@@ -54,7 +54,7 @@ def test_multi_modal(driver):
     
     logger.info(" [SETUP] ⚙️ 액션: 6. 검색어 입력 후 웹 검색 시작")
     chat_basic_page.chat_badge_check("B")           ## 배지 선택(A: 이미지 생성, B: 웹 검색)
-    chat_basic_page.send_message(TEXT12)             ## 텍스트 입려 후 보내기
+    chat_basic_page.send_message(TEXT12)            ## 텍스트 입려 후 보내기
     chat_basic_page.wait_for_loadinngIcon()         ## 채팅 완료때까지 대기
     logger.info("✅ 검증 성공: 6. 검색어 입력 후 웹 검색 완료")
     
